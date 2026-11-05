@@ -162,13 +162,16 @@ p{margin:0}
 .fl2{stroke:var(--fig2);stroke-linecap:round;stroke-linejoin:round;fill:none}
 .bfgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .bftile{appearance:none;background:var(--surface2);border:1px solid var(--line);border-radius:16px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--ink);text-align:center}
-.bftile svg{width:100%;max-width:110px;height:auto}
+.bftile svg{width:100%;max-width:120px;height:auto}
 .bftile b{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
 .bftile span{font-size:12px;color:var(--muted);line-height:1.25}
 .bftile[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 .bftile[aria-pressed="true"] b::before{content:"✓ ";color:var(--accent)}
 .bfb{fill:var(--fig)}
-.bfl{fill:none;stroke:#8C929E;stroke-width:1.4;stroke-linecap:round}
+.bfh{fill:#5B616D}
+.bfs{fill:#AEB4BF}
+.bfs2{fill:#B7BDC8}
+.bfl{fill:none;stroke:#9097A3;stroke-width:.9;stroke-linecap:round}
 .fh{fill:var(--fig)}
 .fb{fill:var(--fig)}
 .fb2{fill:var(--fig2)}
@@ -284,7 +287,7 @@ ol.steps li::marker{color:var(--accent);font-weight:800}
 </svg>
 
 <header class="top"><div class="in">
-  <a class="brand" href="#accueil" data-tabl="accueil" aria-label="Lift, accueil"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="11" width="4" height="10" rx="1.5"/><rect x="6" y="7" width="5" height="18" rx="2"/><rect x="11" y="14.5" width="10" height="3" rx="1"/><rect x="21" y="7" width="5" height="18" rx="2"/><rect x="26" y="11" width="4" height="10" rx="1.5"/></svg>LI<em>FT</em></a>
+  <a class="brand" href="#accueil" data-tabl="accueil" aria-label="Lift, accueil"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="11" width="4" height="10" rx="1.5"/><rect x="6" y="7" width="5" height="18" rx="2"/><rect x="11" y="14.5" width="10" height="3" rx="1"/><rect x="21" y="7" width="5" height="18" rx="2"/><rect x="26" y="11" width="4" height="10" rx="1.5"/></svg><span>LI<em>FT</em></span></a>
   <button class="gear" data-act="go" data-tab="profil" aria-label="Profil et réglages"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
 </div></header>
 
@@ -919,28 +922,48 @@ function smoothClosed(pts){
   return d + "Z";
 }
 function bfFig(sex, bf){
-  const F = sex === "F", cx = 50;
-  const sw = F ? 22 : 27, cw = (F ? 18 : 22) + bf*.12, ww = F ? 10 + bf*.4 : 12 + bf*.45, hw = F ? 20 + bf*.32 : 16 + bf*.24;
-  const bel = Math.max(0, bf - (F ? 28 : 20)) * .35;
-  const R = [[7,28],[sw-5,33],[sw,40],[cw-2,50],[cw,60],[ww+bel*.4,78],[ww+bel,90],[hw,104],[hw-3,114],[5,118]];
-  const pts = [...R, ...R.slice().reverse().map(([x,y]) => [-x,y])].map(([x,y]) => [cx+x, y]);
-  const armW = 8 + bf*.14, thW = (F ? 15 : 14) + bf*.24;
-  let s = `<circle class="bfb" cx="${cx}" cy="16" r="10"/>`;
-  s += limb([cx-sw+1,40],[cx-sw-7-bel*.2,72], armW*.9, armW, armW*.75, .4, "bfb") + limb([cx-sw-7-bel*.2,72],[cx-sw-8-bel*.3,104], armW*.75, armW*.8, 6, .4, "bfb");
-  s += limb([cx+sw-1,40],[cx+sw+7+bel*.2,72], armW*.9, armW, armW*.75, .4, "bfb") + limb([cx+sw+7+bel*.2,72],[cx+sw+8+bel*.3,104], armW*.75, armW*.8, 6, .4, "bfb");
-  s += limb([cx-hw*.55,108],[cx-hw*.45,142], thW, thW+2, 9+bf*.08, .35, "bfb") + limb([cx-hw*.45,142],[cx-hw*.42,170], 9+bf*.08, 10+bf*.06, 6, .3, "bfb");
-  s += limb([cx+hw*.55,108],[cx+hw*.45,142], thW, thW+2, 9+bf*.08, .35, "bfb") + limb([cx+hw*.45,142],[cx+hw*.42,170], 9+bf*.08, 10+bf*.06, 6, .3, "bfb");
+  const F = sex === "F", c = 50, k = Math.max(0, bf - 12), cl = (v,a,b) => Math.max(a, Math.min(b, v));
+  const belly = Math.max(0, bf - (F ? 30 : 22));
+  const waist = F ? 10.5 + k*.30 : 12.8 + k*.36;
+  const hip = F ? 17.5 + bf*.11 : 15.2 + bf*.07;
+  const chest = (F ? 14.5 : 17.5) + bf*.05;
+  const sh = F ? 19.5 : 23.5, armOut = Math.max(0, bf - 18)*.14, aw = (F ? 3.6 : 4.6) + bf*.045;
+  const thighO = (F ? 17 : 15.6) + bf*.1 + (F ? bf*.03 : 0), thighI = cl((F ? 2.6 : 3.4) - bf*.05, .6, 4), knee = (F ? 11.5 : 12.6) + bf*.03;
+  const calf = (F ? 12 : 13.2) + bf*.03;
+  const ax = Math.max(sh + armOut, Math.max(chest + 1, waist + belly*.15) + aw + 1.6); // bord externe du bras, toujours détaché du tronc
+  const R = [
+    [5 + bf*.03, 24],[11 + armOut*.3, 28],[ax - 4.5, 31],[ax, 37],[ax + 1, 47],[ax + 1.2, 60],[ax + 1.6, 71],[ax + .8, 83],[ax + 1.6, 91],[ax - .2, 97],
+    [ax - aw*.85, 92],[ax - aw*.75, 84],[ax - aw*.95, 72],[ax - aw - .6, 61],[ax - aw - 1, 51],
+    [chest - .5, 44],[chest, 54],[waist + belly*.15, 66],[waist + belly*.55, 76],[hip - 1 + belly*.35, 84],[hip, 92],
+    [thighO, 106],[knee + 1, 124],[knee, 130],[calf, 140],[9.6, 158],[10.8, 164],[7.5, 167.5],[4.8, 164],[5, 157],[5.2, 140],[4.2, 128],[thighI + 1, 112],[thighI, 101],[.6, 95]
+  ];
+  const pts = [...R, ...R.slice().reverse().map(([x,y]) => [-x,y])].map(([x,y]) => [c + x, y]);
+  const dOp = cl((F ? 24 : 21) - bf, 0, 10)/10, fOp = cl((bf - (F ? 30 : 24))/10, 0, 1);
+  let s = "";
+  if (F) s += `<path class="bfh" d="M${c-9.5},16 Q${c-11},2 ${c},2 Q${c+11},2 ${c+9.5},16 Q${c+11},26 ${c+7},30 L${c-7},30 Q${c-11},26 ${c-9.5},16Z"/>`;
   s += `<path class="bfb" d="${smoothClosed(pts)}"/>`;
-  // définition musculaire
-  const op = F ? Math.max(0, (24 - bf)/10) : Math.max(0, (22 - bf)/12);
-  if (op > 0){
-    s += `<g class="bfl" opacity="${Math.min(1,op).toFixed(2)}"><path d="M${cx},50 V96"/>`;
-    if (!F) s += `<path d="M${cx-17},50 Q${cx-8},58 ${cx-1},52 M${cx+17},50 Q${cx+8},58 ${cx+1},52"/>`;
-    if ((F && bf <= 20) || (!F && bf <= 15)) s += `<path d="M${cx-9},66 H${cx+9} M${cx-9},76 H${cx+9} M${cx-8},86 H${cx+8}"/>`;
-    s += `</g>`;
+  s += `<ellipse class="bfb" cx="${c}" cy="13.5" rx="${F ? 7 : 7.4}" ry="9.4"/>`;
+  if (F) s += `<path class="bfh" d="M${c-7.6},12 Q${c-6},3.5 ${c},4 Q${c+6},3.5 ${c+7.6},12 Q${c+3},7.5 ${c},8.4 Q${c-3},7.5 ${c-7.6},12Z"/>`;
+  // ombres de volume
+  s += `<path class="bfs" opacity=".55" d="M${c+waist-2},62 Q${c+waist+.5},76 ${c+hip-1.5},90 L${c+hip-4},90 Q${c+waist-2.5},76 ${c+waist-4},62Z"/>`;
+  s += `<path class="bfs" opacity=".45" d="M${c+ax-1},40 Q${c+ax+.8},55 ${c+ax+.5},68 L${c+ax-1.6},68 Q${c+ax-1.4},55 ${c+ax-2.6},41Z"/>`;
+  if (F){
+    const b = 4.6 + bf*.06;
+    s += `<path class="bfl" opacity=".55" d="M${c-12},${49+b*.3} Q${c-7},${55+b} ${c-1.5},${50+b*.3} M${c+12},${49+b*.3} Q${c+7},${55+b} ${c+1.5},${50+b*.3}"/>`;
+  } else {
+    s += `<path class="bfl" opacity="${(.35 + dOp*.5).toFixed(2)}" d="M${c-15},45 Q${c-8},${52+fOp*3} ${c-1},48 M${c+15},45 Q${c+8},${52+fOp*3} ${c+1},48"/>`;
   }
-  if (F) s += `<path class="bfl" opacity=".7" d="M${cx-15},${54+bf*.05} Q${cx-8},${62+bf*.1} ${cx-2},${55+bf*.05} M${cx+15},${54+bf*.05} Q${cx+8},${62+bf*.1} ${cx+2},${55+bf*.05}"/>`;
-  return `<svg viewBox="0 0 100 176" aria-hidden="true">${s}</svg>`;
+  if (dOp > 0){
+    s += `<g opacity="${dOp.toFixed(2)}">`;
+    s += `<path class="bfl" d="M${c},50 V85"/>`;
+    if ((!F && bf <= 16) || (F && bf <= 20)) for (const [y,h] of [[55,6],[62.5,6],[70,6.5]]) for (const sx of [-1,1]) s += `<rect class="bfs2" opacity=".7" x="${(sx < 0 ? c-5.6 : c+1).toFixed(1)}" y="${y}" width="4.6" height="${h}" rx="1.6"/>`;
+    s += `<path class="bfl" d="M${c-11},76 Q${c-7},86 ${c-2.5},93 M${c+11},76 Q${c+7},86 ${c+2.5},93"/>`;
+    s += `<path class="bfl" d="M${c-ax+2.4},40 Q${c-ax+4.2},46 ${c-ax+3.6},50 M${c+ax-2.4},40 Q${c+ax-4.2},46 ${c+ax-3.6},50"/>`;
+    s += `<path class="bfl" d="M${c-thighO+4},104 Q${c-8},112 ${c-thighI-4},122 M${c+thighO-4},104 Q${c+8},112 ${c+thighI+4},122"/></g>`;
+  }
+  s += `<circle class="bfs2" cx="${c}" cy="${76 + belly*.3}" r="${(.8 + belly*.04).toFixed(2)}"/>`;
+  if (fOp > 0) s += `<path class="bfl" opacity="${fOp.toFixed(2)}" d="M${c-waist-belly*.4+3},${83+belly*.25} Q${c},${90+belly*.45} ${c+waist+belly*.4-3},${83+belly*.25}"/>`;
+  return `<svg viewBox="8 -2 84 174" aria-hidden="true">${s}</svg>`;
 }
 function bfSheet(){
   let sex = S.profile.sex === "F" ? "F" : "M";

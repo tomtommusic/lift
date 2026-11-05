@@ -305,6 +305,14 @@ ol.steps li::marker{color:var(--accent);font-weight:800}
 .kv{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
 .kv:first-child{border-top:0}
 .empty{border:1px dashed var(--line);border-radius:var(--r);padding:18px;text-align:center;color:var(--muted)}
+.hero{min-height:270px}
+.hero .art{min-height:270px}
+.hero .art svg.beast{position:absolute;right:-8%;bottom:-2px;width:118%;height:auto;max-width:none}
+.hero .art::before{display:none}
+.hero .tagline2{font-family:var(--f-display);font-style:italic;font-weight:800;font-size:54px;line-height:.85;text-transform:uppercase;color:transparent;-webkit-text-stroke:1.5px var(--accent);letter-spacing:.02em}
+.beast .bl{fill:none;stroke:#7FBDFF;stroke-linecap:round}
+.beast .beast-glow{transform-origin:100px 105px;animation:glow 3.2s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:.75;transform:scale(.97)}50%{opacity:1;transform:scale(1.03)}}
 @media (max-width:380px){.fields{grid-template-columns:1fr}.stats{gap:6px}.stat b{font-size:20px}.setrow,.sethead{grid-template-columns:4px 24px minmax(0,1fr) 8px minmax(0,1fr) 34px 34px;gap:4px}.thumb,.thumb svg{width:64px;height:64px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -1053,6 +1061,35 @@ function thumbHtml(e){
 }
 
 
+function beastSvg(){
+  const c = 100;
+  const R = [[8,40],[11,45],[23,42],[35,40],[44,41],[50,37],[56,27],[62,23],[68,26],[72,33],[78,39],[84,41],[88,35],[89,23],[86,13],[89,5],[86,-3],[77,-4],[71,2],[73,10],[74,20],[72,32],[70,40],[66,48],[58,56],[48,58],[42,58],[40,63],[44,75],[41,87],[28,104],[31,116],[34,124],[44,140],[45,157],[34,176],[39,188],[36,198],[26,210],[31,217],[13,219],[12,206],[16,190],[12,176],[15,152],[8,138],[2,130]];
+  const pts = [...R, ...R.slice().reverse().map(([x,y]) => [-x,y])].map(([x,y]) => [c+x, y+8]);
+  const L = (d, o = 1, w = 1.2) => `<path class="bl" opacity="${o}" stroke-width="${w}" d="${d}"/>`;
+  const sym = (d) => d + " " + d.replace(/(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/g, (m, x, y) => `${(2*c - +x).toFixed(1)},${y}`);
+  let s = `<defs><radialGradient id="bglow" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#3D9BFF" stop-opacity=".55"/><stop offset=".55" stop-color="#3D9BFF" stop-opacity=".12"/><stop offset="1" stop-color="#3D9BFF" stop-opacity="0"/></radialGradient>
+    <linearGradient id="bskin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B2230"/><stop offset="1" stop-color="#0B0E13"/></linearGradient></defs>`;
+  s += `<ellipse class="beast-glow" cx="100" cy="105" rx="105" ry="110" fill="url(#bglow)"/>`;
+  s += `<ellipse cx="100" cy="228" rx="62" ry="5" fill="#000" opacity=".5"/>`;
+  s += `<path d="${smoothClosed(pts)}" fill="url(#bskin)" stroke="#3D9BFF" stroke-width="1.8" stroke-linejoin="round"/>`;
+  s += `<ellipse cx="100" cy="35" rx="10.5" ry="13" fill="url(#bskin)" stroke="#3D9BFF" stroke-width="1.8"/>`;
+  // muscles en lumière bleue
+  s += L(sym(`M88,${57} Q70,${50} 64,${60}`), .7);                    // trapèzes
+  s += L(sym(`M98,62 Q80,58 66,66 Q72,80 98,80`), .8, 1.4);           // pectoraux
+  s += L(`M100,82 V128`, .7);                                          // ligne blanche
+  for (const y of [90, 101, 112]) s += L(sym(`M100,${y} Q93,${y+3} 89,${y-1}`), .65);
+  s += L(sym(`M89,84 Q86,104 90,124`), .6);                            // bord des abdos
+  s += L(sym(`M66,86 Q72,100 78,112 M64,98 Q70,108 74,118`), .5);      // dentelés, obliques
+  s += L(sym(`M74,124 Q86,132 95,138`), .6);                           // V de l'aine
+  s += L(sym(`M58,48 Q54,56 58,66`), .55);                             // deltoïde
+  s += L(sym(`M50,52 Q40,40 28,46 M52,60 Q42,62 34,56`), .65);          // biceps et triceps
+  s += L(sym(`M20,46 Q16,34 18,20`), .45);                             // avant-bras
+  s += L(sym(`M68,140 Q62,158 70,178 M78,150 Q76,166 82,182 M86,166 Q88,176 84,184`), .55); // quadriceps
+  s += L(sym(`M66,198 Q62,206 68,214`), .5);                           // mollets
+  s += L(`M95,33 Q100,35 105,33 M96,42 Q100,44 104,42`, .35, 1);       // visage
+  return `<svg class="beast" viewBox="-6 -8 212 246" aria-hidden="true">${s}</svg>`;
+}
+
 /* ================= estimation visuelle du % de gras ================= */
 const BF_M = [[7,"5–9 %","Très sec, abdos et veines visibles"],[12,"10–14 %","Sec, abdos visibles"],[17,"15–19 %","Athlétique, contour des abdos"],[22,"20–24 %","Muscles visibles, ventre plat"],[27,"25–29 %","Ventre doux"],[32,"30–34 %","Ventre arrondi"],[37,"35–39 %","Ventre proéminent"],[42,"40 % et +","Tour de taille important"]];
 const BF_F = [[12,"10–14 %","Très sèche, abdos visibles"],[17,"15–19 %","Athlétique, abdos dessinés"],[22,"20–24 %","Tonique, ventre plat"],[27,"25–29 %","Silhouette douce"],[32,"30–34 %","Courbes plus marquées"],[37,"35–39 %","Ventre et hanches arrondis"],[42,"40–44 %","Tour de taille important"],[47,"45 % et +","Tour de taille très important"]];
@@ -1151,7 +1188,6 @@ function render(){
   $(".gear").setAttribute("aria-current", tab === "profil" ? "page" : "false");
   const V = {accueil:vHome, seance:vSession, programmes:vPrograms, exercices:vLibrary, stats:vStats, profil:vProfile}[tab];
   $("#view").innerHTML = V();
-  if (tab === "accueil") animate($("#heroFig"), "ohp", HERO_EX);
 }
 const HERO_EX = {p:["delt","tri","trap"], eq:"Barre"};
 function todayIdx(p){ if (!p) return -1; const wd = new Date().getDay(); return p.days.findIndex(d => d.wd === wd); }
@@ -1167,8 +1203,8 @@ function vHome(){
   const sub = !p ? "Choisis d'abord un programme actif" : ti >= 0 ? `${esc(p.name)} · aujourd'hui : ${esc(p.days[ti].name)}` : `${esc(p.name)}${nx ? ` · prochaine : ${esc(p.days[nx.i].name)} ${nx.k === 1 ? "demain" : WD_LONG[nx.w]}` : ""}`;
   return `
   <section class="hero">
-    <div class="txt"><span class="tagline">Lift heavy</span><h1>${hi}${name ? " " + esc(name) : ""}</h1><p>${new Date().toLocaleDateString("fr-CA",{weekday:"long",day:"numeric",month:"long"})}</p></div>
-    <div class="art" aria-hidden="true"><svg id="heroFig" viewBox="20 -30 160 216">${figInner("ohp", HERO_EX, 1)}</svg></div>
+    <div class="txt"><span class="tagline">Lift heavy</span><span class="tagline2">Grow</span><h1>${hi}${name ? " " + esc(name) : ""}</h1><p>${new Date().toLocaleDateString("fr-CA",{weekday:"long",day:"numeric",month:"long"})}</p></div>
+    <div class="art" aria-hidden="true">${beastSvg()}</div>
   </section>
   <section class="quote" aria-label="Citation">
     <span class="eyebrow">Citation</span>

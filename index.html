@@ -17,7 +17,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;1,800&family=Barlow:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;1,800&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
 /* Layout: dark gym-floor app, graphite cards, one electric blue for actions and progress (chosen for colour-blind safety), pill controls, hexagon start button at the thumb. Single dark theme by design. */
 :root{
@@ -327,6 +327,27 @@ ol.steps li::marker{color:var(--accent);font-weight:800}
 .hero2 .hi{font-size:13px;color:var(--muted)}
 .hero2 .heroctl{position:absolute;top:10px;right:10px;z-index:4;display:flex;gap:6px}
 .hero2 .heroctl .btn{min-height:32px;padding:4px 12px;font-size:12px;background:rgba(22,24,29,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.hero3{position:relative;overflow:hidden;border-radius:26px;border:1px solid #1b2230;background:radial-gradient(70% 40% at 50% 46%,rgba(30,110,230,.18),transparent 70%),linear-gradient(160deg,#0b0e14 0%,#06070a 60%,#0a0d13 100%);padding:22px 18px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;isolation:isolate}
+.hero3 .streaks{position:absolute;inset:0;z-index:-1;background:linear-gradient(118deg,transparent 0 16%,rgba(61,155,255,.55) 16.2%,transparent 16.6% 100%),linear-gradient(118deg,transparent 0 22%,rgba(255,255,255,.035) 22% 38%,transparent 38% 100%),linear-gradient(118deg,transparent 0 80%,rgba(61,155,255,.45) 80.2%,transparent 80.6% 100%),linear-gradient(118deg,transparent 0 64%,rgba(255,255,255,.03) 64% 78%,transparent 78% 100%)}
+.hero3 .hi{align-self:flex-start;font-size:13px;color:var(--muted);font-weight:600}
+.hero3 .brandmark{display:flex;flex-direction:column;align-items:center;gap:6px}
+.hero3 .brandmark svg{width:62px;fill:var(--accent);filter:drop-shadow(0 0 12px rgba(61,155,255,.45))}
+.hero3 .word{font-family:var(--f-body);font-style:italic;font-weight:800;font-size:54px;line-height:.9;letter-spacing:.08em;padding-left:.08em}
+.hero3 .word em{font-style:inherit;color:var(--accent)}
+.hero3 .stage{position:relative;width:100%;height:340px;margin-top:4px}
+.hero3 .ring{position:absolute;left:50%;top:52%;width:min(78vw,300px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:3px solid #2E8BFF;box-shadow:0 0 24px rgba(46,139,255,.8),0 0 70px rgba(46,139,255,.35),inset 0 0 26px rgba(46,139,255,.4)}
+.hero3 .statue{position:absolute;left:50%;top:0;height:100%;width:auto;max-width:none;transform:translateX(-50%);object-fit:contain;filter:grayscale(1) contrast(1.2) brightness(.85);-webkit-mask-image:linear-gradient(180deg,#000 70%,transparent 99%);mask-image:linear-gradient(180deg,#000 70%,transparent 99%)}
+.hero3 .statue.chalk{filter:invert(1) grayscale(1) contrast(1.35) brightness(1.05);mix-blend-mode:screen}
+.hero3 .mark{position:absolute;left:50%;top:52%;width:120px;transform:translate(-50%,-50%);fill:var(--accent);filter:drop-shadow(0 0 20px rgba(61,155,255,.7))}
+.hero3 .heroimg{position:absolute;right:2px;bottom:6px;appearance:none;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(22,24,29,.75);display:grid;place-items:center;cursor:pointer}
+.hero3 .heroimg svg{width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hero3 .heroctl{position:absolute;right:-6px;top:-138px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.hero3 .heroctl .btn{min-height:30px;padding:3px 10px;font-size:12px;background:rgba(22,24,29,.75);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.hero3 .tagl{font-weight:700;font-size:13px;letter-spacing:.2em;white-space:nowrap;text-transform:uppercase;margin-top:6px}
+.hero3 .tagl b{color:var(--accent);font-weight:800}
+.hero3 .sub{color:var(--muted);font-size:15px;max-width:30ch}
+.hero3 .go{appearance:none;border:1px solid rgba(61,155,255,.6);width:100%;min-height:58px;border-radius:999px;margin-top:8px;cursor:pointer;color:#fff;font-weight:700;font-size:18px;display:flex;align-items:center;justify-content:center;gap:14px;background:linear-gradient(90deg,#0B2C66,#1F6FE0 60%,#2E8BFF);box-shadow:0 10px 30px rgba(31,111,224,.35)}
+.hero3 .go svg{width:22px;height:22px;stroke:#fff;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
 @media (max-width:380px){.fields{grid-template-columns:1fr}.stats{gap:6px}.stat b{font-size:20px}.setrow,.sethead{grid-template-columns:4px 24px minmax(0,1fr) 8px minmax(0,1fr) 34px 34px;gap:4px}.thumb,.thumb svg{width:64px;height:64px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -1194,6 +1215,19 @@ function bfSheet(){
   });
 }
 
+function heroSheet(){
+  openSheet(`<h2>Image d'accueil</h2>
+    <p class="small muted">Une photo ou un dessin. Un dessin sur fond blanc passe automatiquement en style craie. L'image reste sur cet appareil.</p>
+    <label class="btn primary file">${S.heroImg ? "Changer l'image" : "Choisir une image"}<input type="file" accept="image/*" id="hero-img"></label>
+    ${S.heroImg ? `<button class="btn" data-act="heroMode">${S.heroMode === "chalk" ? "Passer en style photo" : "Passer en style craie"}</button><button class="btn danger" data-act="rmHero">Retirer l'image</button>` : ""}
+    <button class="btn" data-act="close">Fermer</button>`, sh => {
+    sh.querySelector("#hero-img").addEventListener("change", async ev => {
+      const f = ev.target.files[0]; if (!f) return;
+      try { const url = await readImage(f, 900); const prev = S.heroImg, pm = S.heroMode; S.heroImg = url; S.heroMode = (await lightness(url)) > .62 ? "chalk" : "photo"; if (!save()){ S.heroImg = prev; S.heroMode = pm; toast("Espace de stockage plein : image non enregistrée"); return; } closeSheet(); render(); toast(S.heroMode === "chalk" ? "Dessin ajouté en style craie" : "Image d'accueil changée"); }
+      catch(err){ toast("Cette image n'a pas pu être lue"); }
+    });
+  });
+}
 /* ================= navigation ================= */
 const TABS = ["accueil","seance","programmes","exercices","stats","profil"];
 function current(){ const h = (location.hash || "").slice(1); return TABS.includes(h) ? h : (TABS.includes(S.ui.tab) ? S.ui.tab : "accueil"); }
@@ -1205,12 +1239,6 @@ function render(){
   $(".gear").setAttribute("aria-current", tab === "profil" ? "page" : "false");
   const V = {accueil:vHome, seance:vSession, programmes:vPrograms, exercices:vLibrary, stats:vStats, profil:vProfile}[tab];
   $("#view").innerHTML = V();
-  const hi = $("#hero-img");
-  if (tab === "accueil" && hi && hi.addEventListener) hi.addEventListener("change", async ev => {
-    const f = ev.target.files[0]; if (!f) return;
-    try { const url = await readImage(f, 900); const prev = S.heroImg, pm = S.heroMode; S.heroImg = url; S.heroMode = (await lightness(url)) > .62 ? "chalk" : "photo"; if (!save()){ S.heroImg = prev; S.heroMode = pm; toast("Espace de stockage plein : image non enregistrée"); return; } render(); toast(S.heroMode === "chalk" ? "Dessin ajouté en style craie" : "Image d'accueil changée"); }
-    catch(err){ toast("Cette image n'a pas pu être lue"); }
-  });
 }
 const HERO_EX = {p:["delt","tri","trap"], eq:"Barre"};
 function todayIdx(p){ if (!p) return -1; const wd = new Date().getDay(); return p.days.findIndex(d => d.wd === wd); }
@@ -1225,16 +1253,18 @@ function vHome(){
   const p = prog(), ti = todayIdx(p), nx = ti < 0 ? nextDay(p) : null;
   const sub = !p ? "Choisis d'abord un programme actif" : ti >= 0 ? `${esc(p.name)} · aujourd'hui : ${esc(p.days[ti].name)}` : `${esc(p.name)}${nx ? ` · prochaine : ${esc(p.days[nx.i].name)} ${nx.k === 1 ? "demain" : WD_LONG[nx.w]}` : ""}`;
   return `
-  <section class="hero2${S.heroImg ? " has-img" : ""}">
-    <div class="ring" aria-hidden="true"></div>
-    ${S.heroImg ? `<img class="statue ${S.heroMode === "chalk" ? "chalk" : ""}" src="${S.heroImg}" alt="">` : `<svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="11" width="4" height="10" rx="1.5"/><rect x="6" y="7" width="5" height="18" rx="2"/><rect x="11" y="14.5" width="10" height="3" rx="1"/><rect x="21" y="7" width="5" height="18" rx="2"/><rect x="26" y="11" width="4" height="10" rx="1.5"/></svg>`}
-    <div class="fade" aria-hidden="true"></div>
-    <div class="txt">
-      <div class="logo">LI<em>FT</em></div>
-      <p class="tagl">Planifie. Entraîne. Progresse.</p>
-      <p class="hi">${hi}${name ? " " + esc(name) : ""} · ${new Date().toLocaleDateString("fr-CA",{weekday:"long",day:"numeric",month:"long"})}</p>
+  <section class="hero3${S.heroImg ? " has-img" : ""}">
+    <div class="streaks" aria-hidden="true"></div>
+    <p class="hi">${hi}${name ? " " + esc(name) : ""}</p>
+    <div class="brandmark"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="11" width="4" height="10" rx="1.5"/><rect x="6" y="7" width="5" height="18" rx="2"/><rect x="11" y="14.5" width="10" height="3" rx="1"/><rect x="21" y="7" width="5" height="18" rx="2"/><rect x="26" y="11" width="4" height="10" rx="1.5"/></svg><div class="word">LIF<em>T</em></div></div>
+    <div class="stage">
+      <div class="ring" aria-hidden="true"></div>
+      ${S.heroImg ? `<img class="statue ${S.heroMode === "chalk" ? "chalk" : ""}" src="${S.heroImg}" alt="">` : `<svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="11" width="4" height="10" rx="1.5"/><rect x="6" y="7" width="5" height="18" rx="2"/><rect x="11" y="14.5" width="10" height="3" rx="1"/><rect x="21" y="7" width="5" height="18" rx="2"/><rect x="26" y="11" width="4" height="10" rx="1.5"/></svg>`}
+      <button class="heroimg" data-act="heroSheet" aria-label="Image d'accueil"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg></button>
     </div>
-    <div class="heroctl"><label class="btn sm file">${S.heroImg ? "Changer l'image" : "Ajouter une image"}<input type="file" accept="image/*" id="hero-img"></label>${S.heroImg ? `<button class="btn sm" data-act="heroMode">${S.heroMode === "chalk" ? "Style photo" : "Style craie"}</button><button class="btn sm" data-act="rmHero">Retirer</button>` : ""}</div>
+    <p class="tagl">Planifie. Entraîne. <b>Progresse.</b></p>
+    <p class="sub">${p ? (ti >= 0 ? `Aujourd'hui : ${esc(p.days[ti].name)} · ${esc(p.name)}` : `${esc(p.name)}${nx ? ` · prochaine séance : ${esc(p.days[nx.i].name)} ${nx.k === 1 ? "demain" : WD_LONG[nx.w]}` : ""}`) : "Crée tes programmes, suis tes séances et prends des notes."}</p>
+    <button class="go" data-act="${p ? "startSession" : "go"}" data-tab="programmes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>${p ? "Commencer l'entraînement" : "Commencer"}</button>
   </section>
   <section class="quote" aria-label="Citation">
     <span class="eyebrow">Citation</span>
@@ -1242,10 +1272,6 @@ function vHome(){
     <div class="row between"><div><cite>${esc(q.a)}</cite>${q.tr ? `<div class="tr">Traduction libre</div>` : ""}</div>
     <button class="btn sm" data-act="nextQuote">Autre citation</button></div>
   </section>
-  <button class="start" data-act="${p ? "startSession" : "go"}" data-tab="programmes">
-    <span class="ic"><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg></span>
-    <span class="grow"><b>Commencer l'entraînement</b><span>${sub}</span></span>
-  </button>
   <nav class="menu" aria-label="Modules">
     <button class="tile" data-act="go" data-tab="programmes"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="2"/><path class="a" d="M8 11h8M8 15h5"/><path d="M8 2v4M16 2v4"/></svg><b>Programmes</b><span>Créer, générer et choisir le programme actif</span></button>
     <button class="tile" data-act="go" data-tab="exercices"><svg viewBox="0 0 24 24"><path class="a" d="M2 12h20"/><rect x="4" y="7" width="3" height="10" rx="1"/><rect x="17" y="7" width="3" height="10" rx="1"/></svg><b>Exercices</b><span>${EX_LIST.length} exercices : musculation, mobilité, tendons</span></button>
@@ -1743,8 +1769,9 @@ const A = {
   newEx: () => exFormSheet(null),
   editEx: t => exFormSheet(t.dataset.ex),
   delEx: t => { if (!armed(t)) return; S.custom = S.custom.filter(c => c.id !== t.dataset.ex); rebuildEx(); save(); closeSheet(); render(); toast("Exercice supprimé"); },
-  rmHero: () => { delete S.heroImg; delete S.heroMode; save(); render(); },
-  heroMode: () => { S.heroMode = S.heroMode === "chalk" ? "photo" : "chalk"; save(); render(); },
+  heroSheet: () => heroSheet(),
+  rmHero: () => { delete S.heroImg; delete S.heroMode; save(); closeSheet(); render(); },
+  heroMode: () => { S.heroMode = S.heroMode === "chalk" ? "photo" : "chalk"; save(); closeSheet(); render(); },
   rmPhoto: t => { delete S.imgs[t.dataset.ex]; save(); exDetail(t.dataset.ex); render(); },
   logEx: t => logSheet(t.dataset.ex),
   logAny: () => logSheet($("#j-any").value),

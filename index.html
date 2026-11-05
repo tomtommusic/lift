@@ -160,6 +160,15 @@ p{margin:0}
 .fp{fill:var(--prop);stroke:var(--prop)}
 .fl{stroke:var(--fig);stroke-linecap:round;stroke-linejoin:round;fill:none}
 .fl2{stroke:var(--fig2);stroke-linecap:round;stroke-linejoin:round;fill:none}
+.bfgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.bftile{appearance:none;background:var(--surface2);border:1px solid var(--line);border-radius:16px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--ink);text-align:center}
+.bftile svg{width:100%;max-width:110px;height:auto}
+.bftile b{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+.bftile span{font-size:12px;color:var(--muted);line-height:1.25}
+.bftile[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
+.bftile[aria-pressed="true"] b::before{content:"✓ ";color:var(--accent)}
+.bfb{fill:var(--fig)}
+.bfl{fill:none;stroke:#8C929E;stroke-width:1.4;stroke-linecap:round}
 .fh{fill:var(--fig)}
 .fb{fill:var(--fig)}
 .fb2{fill:var(--fig2)}
@@ -899,6 +908,56 @@ function thumbHtml(e){
   return `<span class="thumb">${mapSvg(FRONT, e.p, e.s)}</span>`;
 }
 
+
+/* ================= estimation visuelle du % de gras ================= */
+const BF_M = [[8,"Très sec : abdos et veines bien visibles"],[12,"Sec : abdos visibles"],[15,"Athlétique : contour des abdos"],[20,"En forme : muscles visibles, pas d'abdos"],[25,"Ventre doux, peu de définition"],[30,"Ventre arrondi"],[35,"Ventre proéminent"],[40,"Tour de taille important"]];
+const BF_F = [[15,"Très sèche : abdos visibles"],[20,"Athlétique : ventre plat, muscles dessinés"],[25,"En forme : silhouette tonique et douce"],[30,"Courbes plus marquées"],[35,"Ventre et hanches arrondis"],[40,"Tour de taille important"],[45,"Tour de taille très important"]];
+function smoothClosed(pts){
+  const n = pts.length; let d = `M${f1(pts[0][0])},${f1(pts[0][1])}`;
+  for (let i=0;i<n;i++){ const p0 = pts[(i-1+n)%n], p1 = pts[i], p2 = pts[(i+1)%n], p3 = pts[(i+2)%n];
+    d += ` C${f1(p1[0]+(p2[0]-p0[0])/6)},${f1(p1[1]+(p2[1]-p0[1])/6)} ${f1(p2[0]-(p3[0]-p1[0])/6)},${f1(p2[1]-(p3[1]-p1[1])/6)} ${f1(p2[0])},${f1(p2[1])}`; }
+  return d + "Z";
+}
+function bfFig(sex, bf){
+  const F = sex === "F", cx = 50;
+  const sw = F ? 22 : 27, cw = (F ? 18 : 22) + bf*.12, ww = F ? 10 + bf*.4 : 12 + bf*.45, hw = F ? 20 + bf*.32 : 16 + bf*.24;
+  const bel = Math.max(0, bf - (F ? 28 : 20)) * .35;
+  const R = [[7,28],[sw-5,33],[sw,40],[cw-2,50],[cw,60],[ww+bel*.4,78],[ww+bel,90],[hw,104],[hw-3,114],[5,118]];
+  const pts = [...R, ...R.slice().reverse().map(([x,y]) => [-x,y])].map(([x,y]) => [cx+x, y]);
+  const armW = 8 + bf*.14, thW = (F ? 15 : 14) + bf*.24;
+  let s = `<circle class="bfb" cx="${cx}" cy="16" r="10"/>`;
+  s += limb([cx-sw+1,40],[cx-sw-7-bel*.2,72], armW*.9, armW, armW*.75, .4, "bfb") + limb([cx-sw-7-bel*.2,72],[cx-sw-8-bel*.3,104], armW*.75, armW*.8, 6, .4, "bfb");
+  s += limb([cx+sw-1,40],[cx+sw+7+bel*.2,72], armW*.9, armW, armW*.75, .4, "bfb") + limb([cx+sw+7+bel*.2,72],[cx+sw+8+bel*.3,104], armW*.75, armW*.8, 6, .4, "bfb");
+  s += limb([cx-hw*.55,108],[cx-hw*.45,142], thW, thW+2, 9+bf*.08, .35, "bfb") + limb([cx-hw*.45,142],[cx-hw*.42,170], 9+bf*.08, 10+bf*.06, 6, .3, "bfb");
+  s += limb([cx+hw*.55,108],[cx+hw*.45,142], thW, thW+2, 9+bf*.08, .35, "bfb") + limb([cx+hw*.45,142],[cx+hw*.42,170], 9+bf*.08, 10+bf*.06, 6, .3, "bfb");
+  s += `<path class="bfb" d="${smoothClosed(pts)}"/>`;
+  // définition musculaire
+  const op = F ? Math.max(0, (24 - bf)/10) : Math.max(0, (22 - bf)/12);
+  if (op > 0){
+    s += `<g class="bfl" opacity="${Math.min(1,op).toFixed(2)}"><path d="M${cx},50 V96"/>`;
+    if (!F) s += `<path d="M${cx-17},50 Q${cx-8},58 ${cx-1},52 M${cx+17},50 Q${cx+8},58 ${cx+1},52"/>`;
+    if ((F && bf <= 20) || (!F && bf <= 15)) s += `<path d="M${cx-9},66 H${cx+9} M${cx-9},76 H${cx+9} M${cx-8},86 H${cx+8}"/>`;
+    s += `</g>`;
+  }
+  if (F) s += `<path class="bfl" opacity=".7" d="M${cx-15},${54+bf*.05} Q${cx-8},${62+bf*.1} ${cx-2},${55+bf*.05} M${cx+15},${54+bf*.05} Q${cx+8},${62+bf*.1} ${cx+2},${55+bf*.05}"/>`;
+  return `<svg viewBox="0 0 100 176" aria-hidden="true">${s}</svg>`;
+}
+function bfSheet(){
+  let sex = S.profile.sex === "F" ? "F" : "M";
+  const body = () => `<h2>Estimer mon % de gras</h2>
+    <p class="small muted">Choisis la silhouette qui te ressemble le plus. C'est une estimation visuelle : compte quelques points de marge d'erreur.</p>
+    <div class="seg" id="bf-sex"><button data-v="M" aria-pressed="${sex==="M"}">Homme</button><button data-v="F" aria-pressed="${sex==="F"}">Femme</button></div>
+    <div class="bfgrid">${(sex === "F" ? BF_F : BF_M).map(([v,t]) => `<button class="bftile" data-bf="${v}" aria-pressed="${String(+S.profile.bf === v)}">${bfFig(sex, v)}<b>≈ ${v} %</b><span>${t}</span></button>`).join("")}</div>
+    <button class="btn" data-act="close">Annuler</button>`;
+  openSheet(`<div id="bf-body" class="stack">${body()}</div>`, sh => {
+    sh.addEventListener("click", ev => {
+      const sb = ev.target.closest("#bf-sex button"); if (sb){ sex = sb.dataset.v; sh.querySelector("#bf-body").innerHTML = body(); return; }
+      const t = ev.target.closest("[data-bf]"); if (!t) return;
+      S.profile.bf = t.dataset.bf; S.profile.sex = sex; save(); closeSheet(); render(); toast(`% de gras estimé à ${t.dataset.bf} %`);
+    });
+  });
+}
+
 /* ================= navigation ================= */
 const TABS = ["accueil","seance","programmes","exercices","stats","profil"];
 function current(){ const h = (location.hash || "").slice(1); return TABS.includes(h) ? h : (TABS.includes(S.ui.tab) ? S.ui.tab : "accueil"); }
@@ -1263,6 +1322,7 @@ function vProfile(){
         : `<div class="field"><label for="p-cm">Grandeur</label><div class="unit-in"><input id="p-cm" type="number" inputmode="decimal" step="any" data-p="cm" value="${P.hcm ? Math.round(+P.hcm) : ""}" placeholder="ex. 178"><span>cm</span></div></div>`}
       <div class="field"><label for="p-bf">Gras corporel</label><div class="unit-in"><input id="p-bf" type="number" inputmode="decimal" step="any" data-p="bf" value="${esc(P.bf)}" placeholder="facultatif"><span>%</span></div></div>
     </div>
+    <button class="btn sm" data-act="bfSheet">Estimer mon % de gras avec une silhouette</button>
     <button class="btn" data-act="logWeight">Enregistrer la pesée d'aujourd'hui</button>
   </section>
   <section class="card">
@@ -1405,6 +1465,7 @@ const A = {
   goPrograms: () => { closeSheet(); go("programmes"); },
   setActive: t => { S.active = t.dataset.id; S.ui.jday = Math.max(0, todayIdx(prog())); save(); closeSheet(); render(); toast("Programme actif changé"); },
   jday: t => { S.ui.jday = +t.dataset.i; save(); render(); },
+  bfSheet: () => bfSheet(),
   newProg: () => newProgSheet(),
   genProg: () => genSheet(),
   editProg: t => openDraft(S.programs.find(p => p.id === t.dataset.id), false),

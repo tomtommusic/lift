@@ -173,6 +173,23 @@ p{margin:0}
 .bfs2{fill:#B7BDC8}
 .bfl{fill:none;stroke:#9097A3;stroke-width:.9;stroke-linecap:round}
 .fh{fill:var(--fig)}
+.thumb.il-bg,.figbox{background:#EEF1F5}
+.il .fig-floor{stroke:#D3D8DF;stroke-width:2}
+.il .fp{fill:#A3A9B1;stroke:#A3A9B1}
+.il .fb{fill:#E2E5EA;stroke:#FFFFFF;stroke-width:1}
+.il .fb2{fill:#CBD0D7;stroke:#FFFFFF;stroke-width:1}
+.il .fh{fill:#D4D8DE;stroke:#FFFFFF;stroke-width:1}
+.il .fb.fx,.il .fb2.fx,.il .fxf{fill:#1F86EE}
+.il .fb.fs,.il .fb2.fs{fill:#A9D0F8}
+.il .fsh{fill:#9EA4AC;stroke:#FFFFFF;stroke-width:1}
+.il .fsh2{fill:#8D939B;stroke:#FFFFFF;stroke-width:1}
+.il .eqp{fill:#9AA0A8;stroke:#7B8189;stroke-width:3}
+.il .eqf{fill:#7B8189}
+.il .eql{stroke:#7B8189}
+.il .eqband{stroke:#1F86EE}
+.il .ghost{opacity:.3}
+.il .arw{fill:none;stroke:#1F86EE;stroke-width:2.6;stroke-linecap:round}
+.il .arwh{fill:#1F86EE}
 .fb{fill:var(--fig)}
 .fb2{fill:var(--fig2)}
 .fb.fx{fill:var(--accent)}
@@ -208,6 +225,7 @@ p{margin:0}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend svg{width:16px;height:16px}
+.legend .lg2{fill:#A9D0F8}
 .note{font-size:13px;color:var(--muted);border-left:3px solid var(--accent);padding-left:10px}
 details.info{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px}
 details summary{cursor:pointer;font-weight:700}
@@ -329,7 +347,7 @@ const GROUPS = [["pec","Pectoraux"],["lat","Dos"],["delt","Épaules"],["trap","T
 const GROUP_OF = {pec:"pec",lat:"lat",lowb:"lat",tspine:"lat",delt:"delt",rc:"delt",trap:"trap",scap:"trap",bic:"bic",tri:"tri",fa:"fa",abs:"abs",obl:"abs",quad:"quad",hipf:"quad",ham:"ham",glu:"glu",gmed:"glu",add:"add",calf:"calf"};
 const REGION_NAME = {pec:"Pectoraux",lat:"Grands dorsaux",lowb:"Lombaires",tspine:"Colonne thoracique",delt:"Deltoïdes",rc:"Coiffe des rotateurs",trap:"Trapèzes",scap:"Stabilisateurs de l'omoplate",bic:"Biceps",tri:"Triceps",fa:"Avant-bras",abs:"Grand droit (abdos)",obl:"Obliques",quad:"Quadriceps",hipf:"Fléchisseurs de hanche",ham:"Ischio-jambiers",glu:"Fessiers",gmed:"Moyen fessier",add:"Adducteurs",calf:"Mollets"};
 const ALIAS = {delt:["rc"],trap:["scap"],glu:["gmed"],quad:["hipf"],lat:["tspine"]};
-const REG_SEG = {pec:"torso",abs:"torso",obl:"torso",lat:"torso",lowb:"torso",trap:"torso",scap:"torso",tspine:"torso",delt:"sh",rc:"sh",bic:"ua",tri:"ua",fa:"fa",quad:"th",hipf:"th",ham:"th",add:"th",glu:"hip",gmed:"hip",calf:"sn"};
+const REG_SEG = {pec:"chest",abs:"belly",obl:"belly",lat:"chest",lowb:"belly",trap:"chest",scap:"chest",tspine:"chest",delt:"sh",rc:"sh",bic:"ua",tri:"ua",fa:"fa",quad:"th",hipf:"th",ham:"th",add:"th",glu:"hip",gmed:"hip",calf:"sn"};
 const EQUIP = ["Barre","Barre EZ","Haltères","Kettlebell","Machine","Poulie","Poids du corps","Élastique"];
 const SRC = {
   m:"Repères inspirés de la prise de position de l'ACSM (2009) : 6 à 12 RM pour l'hypertrophie, 1 à 6 RM pour la force, plus de 15 reps pour l'endurance. Des charges plus légères font aussi grossir le muscle si la série approche de l'échec (méta-analyse de Schoenfeld et coll., 2017).",
@@ -804,42 +822,88 @@ function equipSvg(fam, ex, pts){
   if (eq === "Machine" && fam.mp) s += propsSvg(fam.mp, pts);
   return s;
 }
-function figInner(famId, ex, u){
-  const fam = FAM[famId]; if (!fam) return "";
+const famPts = (fam, u) => solve(fam.k.length > 1 ? lerpK(fam.k[0], fam.k[1], u) : fam.k[0], fam.v === "front", fam.an);
+function bodySvg(fam, ex, pts, il){
   const front = fam.v === "front";
-  const k = fam.k.length > 1 ? lerpK(fam.k[0], fam.k[1], u) : fam.k[0];
-  const pts = solve(k, front, fam.an);
-  const prim = new Set(); (ex && ex.p ? ex.p : []).forEach(m => prim.add(REG_SEG[m]));
-  const c = (seg, far) => (far ? "fb2" : "fb") + (prim.has(seg) ? " fx" : "");
-  let s = `<line class="fig-floor" x1="0" y1="184" x2="200" y2="184"/>` + propsSvg(fam.props, pts);
+  const prim = new Set(), sec = new Set();
+  (ex && ex.p ? ex.p : []).forEach(m => prim.add(REG_SEG[m]));
+  (ex && ex.s ? ex.s : []).forEach(m => { if (!prim.has(REG_SEG[m])) sec.add(REG_SEG[m]); });
+  const c = (seg, far) => (far ? "fb2" : "fb") + (prim.has(seg) ? " fx" : il && sec.has(seg) ? " fs" : "");
+  const tor = prim.has("chest") || prim.has("belly") ? " fx" : il && (sec.has("chest") || sec.has("belly")) ? " fs" : "";
+  const mix = (a, b, t) => [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t];
+  let s = "";
   // jambe et bras arrière
-  s += limb(pts.P2, pts.K2, 15, 19, 10, .42, c("th", true)) + limb(pts.K2, pts.A2, 10, 13, 6, .3, c("sn", true)) + limb(pts.A2, pts.T2, 7, 7, 5, .5, "fb2");
+  s += limb(pts.P2, pts.K2, 15, 19, 10, .42, c("th", true)) + limb(pts.K2, pts.A2, 10, 13, 6, .3, c("sn", true));
+  if (il && !front) s += limb(mix(pts.P, pts.N, .1), mix(pts.P2, pts.K2, .55), 22, 23, 19, .4, prim.has("hip") ? "fb2 fx" : "fsh2");
+  else if (il) s += limb(pts.P2, mix(pts.P2, pts.K2, .55), 19, 21, 18, .5, prim.has("hip") ? "fb2 fx" : "fsh2");
+  s += limb(pts.A2, pts.T2, il ? 9 : 7, il ? 10 : 7, il ? 8 : 5, .5, il ? "fsh2" : "fb2");
   s += limb(pts.S2, pts.E2, 11, 15, 8, .45, c("ua", true)) + limb(pts.E2, pts.W2, 9, 11, 6, .35, c("fa", true));
-  // tronc en V, cou, tête
+  if (il && !front) s += limb(pts.S2, mix(pts.S2, pts.E2, .42), 15, 16, 10, .3, c("sh", true));
   s += limb(pts.N, pts.H, 9, 9, 8, .5, "fb");
   if (front){
     const q = (p, d) => f1(p[0]+d[0]) + "," + f1(p[1]+d[1]);
-    s += `<path class="${c("torso")}" d="M${q(pts.S1,[-7,-3])} L${q(pts.S2,[7,-3])} Q${q(pts.S2,[4,22])} ${q(pts.P2,[3,-4])} L${q(pts.P2,[2,4])} L${q(pts.P1,[-2,4])} L${q(pts.P1,[-3,-4])} Q${q(pts.S1,[-4,22])} ${q(pts.S1,[-7,-3])} Z"/>`;
+    s += `<path class="fb${tor}" d="M${q(pts.S1,[-7,-3])} L${q(pts.S2,[7,-3])} Q${q(pts.S2,[4,22])} ${q(pts.P2,[3,-4])} L${q(pts.P2,[2,4])} L${q(pts.P1,[-2,4])} L${q(pts.P1,[-3,-4])} Q${q(pts.S1,[-4,22])} ${q(pts.S1,[-7,-3])} Z"/>`;
+    if (il) s += `<path class="fsh" d="M${q(pts.P1,[-10,-6])} L${q(pts.P2,[10,-6])} L${q(pts.P2,[11,14])} L${q(pts.P1,[-11,14])} Z"/>`;
     s += `<circle class="${c("sh")}" cx="${f1(pts.S2[0]+3)}" cy="${f1(pts.S2[1])}" r="8"/>`;
-  } else s += limb(pts.P, pts.N, 17, 27, 23, .66, c("torso"));
+  } else {
+    s += limb(pts.P, pts.N, 17, 27, 23, .66, "fb" + (il ? "" : tor));
+    if (il){
+      const m = mix(pts.P, pts.N, .45);
+      if (prim.has("belly") || sec.has("belly")) s += limb(pts.P, m, 16, 21, 24, .6, "fb " + (prim.has("belly") ? "fx" : "fs"));
+      if (prim.has("chest") || sec.has("chest")) s += limb(m, pts.N, 24, 27, 22, .5, "fb " + (prim.has("chest") ? "fx" : "fs"));
+    }
+  }
   s += `<circle class="fh" cx="${f1(pts.H[0])}" cy="${f1(pts.H[1])}" r="10"/>`;
-  if (prim.has("hip")) s += `<circle class="fxf" cx="${f1(pts.P[0])}" cy="${f1(pts.P[1])}" r="9"/>`;
+  if (prim.has("hip") && !il) s += `<circle class="fxf" cx="${f1(pts.P[0])}" cy="${f1(pts.P[1])}" r="9"/>`;
   // jambe et bras avant
-  s += limb(pts.P1, pts.K1, 16, 20, 10, .42, c("th")) + limb(pts.K1, pts.A1, 10, 14, 6, .3, c("sn")) + limb(pts.A1, pts.T1, 7, 7, 5, .5, "fb");
+  s += limb(pts.P1, pts.K1, 16, 20, 10, .42, c("th")) + limb(pts.K1, pts.A1, 10, 14, 6, .3, c("sn"));
+  if (il){ const shc = prim.has("hip") ? "fb fx" : "fsh"; s += front ? limb(pts.P1, mix(pts.P1, pts.K1, .55), 20, 22, 19, .5, shc) : limb(mix(pts.P, pts.N, .1), mix(pts.P1, pts.K1, .55), 23, 24, 20, .4, shc); }
+  s += limb(pts.A1, pts.T1, il ? 9 : 7, il ? 10 : 7, il ? 8 : 5, .5, il ? "fsh" : "fb");
   s += limb(pts.S1, pts.E1, 11, 15, 8, .45, c("ua")) + limb(pts.E1, pts.W1, 9, 11, 6, .35, c("fa"));
-  s += `<circle class="${c("sh")}" cx="${f1(pts.S1[0] + (front ? -3 : 0))}" cy="${f1(pts.S1[1])}" r="${front ? 8 : 9}"/>`;
   if (pts.X1) s += limb(pts.W1, pts.X1, 6, 7, 5, .5, c("fa"));
-  return s + equipSvg(fam, ex, pts);
+  s += il && !front ? limb(pts.S1, mix(pts.S1, pts.E1, .42), 16, 17, 10, .3, c("sh")) : `<circle class="${c("sh")}" cx="${f1(pts.S1[0] + (front ? -3 : 0))}" cy="${f1(pts.S1[1])}" r="${front ? 8 : 9}"/>`;
+  return s;
 }
-function figSvg(famId, ex, u = 1){ return `<svg viewBox="0 -14 200 206" role="img" aria-label="Illustration du mouvement">${figInner(famId, ex, u)}</svg>`; }
+function figInner(famId, ex, u){
+  const fam = FAM[famId]; if (!fam) return "";
+  const pts = famPts(fam, u);
+  return `<line class="fig-floor" x1="0" y1="184" x2="200" y2="184"/>` + propsSvg(fam.props, pts) + bodySvg(fam, ex, pts, false) + equipSvg(fam, ex, pts);
+}
+/* flèche de mouvement : suit le point qui se déplace le plus entre le départ et l'arrivée */
+function arrowSvg(fam, a, b){
+  const keys = fam.impl === "P" ? ["P"] : ["W1","A1","N","P","K1"];
+  let best = null, dmax = 0;
+  for (const k of keys){ const d = Math.hypot(b[k][0]-a[k][0], b[k][1]-a[k][1]); if (d > dmax + 4){ dmax = d; best = k; } }
+  if (!best || dmax < 14) return "";
+  const p = a[best], q = b[best], dx = q[0]-p[0], dy = q[1]-p[1], L = Math.hypot(dx,dy);
+  const s0 = [p[0]+dx*.22, p[1]+dy*.22], s1 = [p[0]+dx*.78, p[1]+dy*.78];
+  const nx = -dy/L, ny = dx/L, side = (nx*(100-p[0]) + ny*(90-p[1])) > 0 ? -1 : 1, bend = Math.min(18, L*.22)*side;
+  const cpt = [(s0[0]+s1[0])/2 + nx*bend, (s0[1]+s1[1])/2 + ny*bend];
+  const tx = s1[0]-cpt[0], ty = s1[1]-cpt[1], tl = Math.hypot(tx,ty) || 1, ux = tx/tl, uy = ty/tl;
+  const h1 = [s1[0]-ux*8-uy*5, s1[1]-uy*8+ux*5], h2 = [s1[0]-ux*8+uy*5, s1[1]-uy*8-ux*5];
+  return `<path class="arw" d="M${f1(s0[0])},${f1(s0[1])} Q${f1(cpt[0])},${f1(cpt[1])} ${f1(s1[0]-ux*3)},${f1(s1[1]-uy*3)}"/><path class="arwh" d="M${f1(s1[0]+ux*2)},${f1(s1[1]+uy*2)} L${f1(h1[0])},${f1(h1[1])} L${f1(h2[0])},${f1(h2[1])} Z"/>`;
+}
+/* scène illustrée : position finale en fantôme, flèche, puis position courante */
+function sceneInner(famId, ex, u){
+  const fam = FAM[famId]; if (!fam) return "";
+  const cur = famPts(fam, u);
+  let s = `<line class="fig-floor" x1="0" y1="184" x2="200" y2="184"/>` + propsSvg(fam.props, cur);
+  if (fam.k.length > 1){
+    const a = famPts(fam, 0), b = famPts(fam, 1);
+    s += `<g class="ghost">${bodySvg(fam, ex, b, true)}${equipSvg(fam, ex, b)}</g>` + arrowSvg(fam, a, b);
+  }
+  return s + bodySvg(fam, ex, cur, true) + equipSvg(fam, ex, cur);
+}
+function figSvg(famId, ex, u = 0){ return `<svg class="il" viewBox="0 -14 200 206" role="img" aria-label="Illustration du mouvement">${sceneInner(famId, ex, u)}</svg>`; }
 const REDUCE = (() => { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch(e){ return false; } })();
-function animate(svg, famId, ex){
+function animate(svg, famId, ex, scene){
   const fam = FAM[famId]; if (!svg || !fam || fam.k.length < 2 || REDUCE) return;
+  const draw = scene ? sceneInner : figInner;
   const dur = 1300, hold = 380, cycle = 2*(dur+hold), t0 = performance.now(); let last = 0;
   const ease = x => x < .5 ? 2*x*x : 1 - Math.pow(-2*x+2, 2)/2;
   const step = now => {
     if (!svg.isConnected) return;
-    if (now - last > 33){ last = now; const ph = (now - t0) % cycle; const u = ph < hold ? 0 : ph < hold+dur ? ease((ph-hold)/dur) : ph < 2*hold+dur ? 1 : 1 - ease((ph-2*hold-dur)/dur); svg.innerHTML = figInner(famId, ex, u); }
+    if (now - last > 33){ last = now; const ph = (now - t0) % cycle; const u = ph < hold ? 0 : ph < hold+dur ? ease((ph-hold)/dur) : ph < 2*hold+dur ? 1 : 1 - ease((ph-2*hold-dur)/dur); svg.innerHTML = draw(famId, ex, u); }
     requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
@@ -907,7 +971,7 @@ const photoOf = id => (S.imgs && S.imgs[id]) || (EX[id] && EX[id].img) || null;
 function thumbHtml(e){
   const ph = photoOf(e.id);
   if (ph) return `<span class="thumb"><img src="${ph}" alt=""></span>`;
-  if (e.fam && FAM[e.fam]) return `<span class="thumb">${figSvg(e.fam, e, 1)}</span>`;
+  if (e.fam && FAM[e.fam]) return `<span class="thumb il-bg">${figSvg(e.fam, e, 0)}</span>`;
   return `<span class="thumb">${mapSvg(FRONT, e.p, e.s)}</span>`;
 }
 
@@ -1221,7 +1285,7 @@ function exDetail(id){
     <div><span class="eyebrow">${esc(e.custom ? "Mon exercice" : CAT_LABEL[e.cat])}</span><h2>${esc(e.n)}</h2></div>
     <div class="row" style="gap:6px"><span class="tag">${esc(e.eq)}</span>${hasFig ? `<span class="tag">${esc(FAM[e.fam].lab)}</span>` : ""}</div>
     ${ph ? `<div class="photo"><img src="${ph}" alt="Photo de l'exercice"></div>` : ""}
-    ${hasFig ? `<div class="figbox" id="figbox">${figSvg(e.fam, e, 0)}</div>` : ""}
+    ${hasFig ? `<div class="figbox" id="figbox">${figSvg(e.fam, e, 0)}</div><div class="legend"><span><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" rx="3" fill="#1F86EE"/></svg>Muscles principaux</span><span><svg viewBox="0 0 16 16"><rect class="lg2" x="1" y="1" width="14" height="14" rx="3"/></svg>Secondaires</span><span><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" rx="3" fill="#E2E5EA" opacity=".45"/></svg>Position d'arrivée</span></div>` : ""}
     ${e.custom ? "" : `<div class="row">
       <label class="btn sm file">${ph ? "Changer la photo" : "Ajouter ma photo"}<input type="file" accept="image/*" id="ex-img"></label>
       ${ph ? `<button class="btn sm danger" data-act="rmPhoto" data-ex="${id}">Retirer la photo</button>` : ""}
@@ -1246,7 +1310,7 @@ function exDetail(id){
     ${e.custom ? `<div class="row"><button class="btn grow" data-act="editEx" data-ex="${id}">Modifier</button><button class="btn danger grow" data-act="delEx" data-ex="${id}">Supprimer</button></div>` : ""}
     <button class="btn" data-act="close">Fermer</button>`,
   sh => {
-    if (hasFig) animate(sh.querySelector("#figbox svg"), e.fam, e);
+    if (hasFig) animate(sh.querySelector("#figbox svg"), e.fam, e, true);
     const b = sh.querySelector("#ad-go"); if (b) b.onclick = () => addToDay(+sh.querySelector("#ad-day").value, id);
     const fi = sh.querySelector("#ex-img");
     if (fi) fi.onchange = async ev => {

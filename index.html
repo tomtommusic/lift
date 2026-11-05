@@ -296,7 +296,11 @@ details.info p{margin-top:8px;font-size:14px;color:var(--muted)}
 
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.66);z-index:40;display:flex;align-items:flex-end;justify-content:center}
 .sheet{background:var(--surface);color:var(--ink);width:100%;max-width:600px;max-height:92%;overflow-y:auto;border-radius:26px 26px 0 0;border:1px solid var(--line);border-bottom:0;padding-top:12px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
-.sheet .grab{width:44px;height:5px;border-radius:3px;background:var(--line);align-self:center}
+.sheet .grab{width:44px;height:5px;border-radius:3px;background:var(--line)}
+.sheet .sheethead{position:sticky;top:-12px;z-index:5;display:flex;justify-content:center;align-items:flex-start;height:0;overflow:visible}
+.sheet .sheet-x{position:absolute;right:-4px;top:-2px;appearance:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface2);display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.45)}
+.sheet .sheet-x svg{width:18px;height:18px;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;fill:none}
+.sheet > div:nth-child(2) h2,.sheet > h2{padding-right:48px}
 .sheet h2{font-size:24px;font-weight:800}
 ol.steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px}
 ol.steps li::marker{color:var(--accent);font-weight:800}
@@ -328,7 +332,7 @@ ol.steps li::marker{color:var(--accent);font-weight:800}
 .hero2 .hi{font-size:13px;color:var(--muted)}
 .hero2 .heroctl{position:absolute;top:10px;right:10px;z-index:4;display:flex;gap:6px}
 .hero2 .heroctl .btn{min-height:32px;padding:4px 12px;font-size:12px;background:rgba(22,24,29,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.hero3{position:relative;overflow:hidden;border-radius:26px;border:1px solid #1b2230;background:radial-gradient(70% 40% at 50% 46%,rgba(30,110,230,.18),transparent 70%),linear-gradient(160deg,#0b0e14 0%,#06070a 60%,#0a0d13 100%);padding:22px 18px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;isolation:isolate}
+.hero3{width:100%;max-width:440px;margin-inline:auto;position:relative;overflow:hidden;border-radius:26px;border:1px solid #1b2230;background:radial-gradient(70% 40% at 50% 46%,rgba(30,110,230,.18),transparent 70%),linear-gradient(160deg,#0b0e14 0%,#06070a 60%,#0a0d13 100%);padding:22px 18px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;isolation:isolate}
 .hero3 .streaks{position:absolute;inset:0;z-index:-1;background:linear-gradient(118deg,transparent 0 16%,rgba(61,155,255,.55) 16.2%,transparent 16.6% 100%),linear-gradient(118deg,transparent 0 22%,rgba(255,255,255,.035) 22% 38%,transparent 38% 100%),linear-gradient(118deg,transparent 0 80%,rgba(61,155,255,.45) 80.2%,transparent 80.6% 100%),linear-gradient(118deg,transparent 0 64%,rgba(255,255,255,.03) 64% 78%,transparent 78% 100%)}
 .hero3 .hi{align-self:flex-start;font-size:13px;color:var(--muted);font-weight:600}
 .hero3 .brandmark{display:flex;flex-direction:column;align-items:center;gap:6px}
@@ -1080,7 +1084,7 @@ function armed(btn, label){
 }
 function openSheet(html, mount){
   const root = $("#sheetRoot");
-  root.innerHTML = `<div class="scrim" data-scrim><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div></div>`;
+  root.innerHTML = `<div class="scrim" data-scrim><div class="sheet" role="dialog" aria-modal="true"><div class="sheethead"><div class="grab"></div><button class="sheet-x" data-act="close" aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>${html}</div></div>`;
   document.body.style.overflow = "hidden";
   if (mount) mount(root.querySelector(".sheet"));
 }
@@ -1485,8 +1489,7 @@ function exDetail(id){
     ${target && target.days.length ? `<div class="field"><label for="ad-day">Ajouter à ${esc(target.name)}${S.draft ? " (en cours de modification)" : ""}</label>
       <div class="row" style="flex-wrap:nowrap"><select id="ad-day" class="inp grow">${target.days.map((d,i) => `<option value="${i}" ${S.pick && S.pick.i===i ? "selected" : ""}>${esc(d.name)}</option>`).join("")}</select><button class="btn primary" id="ad-go">Ajouter</button></div></div>` : ""}
     <div class="row"><button class="btn grow" data-act="logEx" data-ex="${id}">Noter une séance</button>${logsFor(id).length ? `<button class="btn grow" data-act="hist" data-ex="${id}">Historique</button>` : ""}</div>
-    ${e.custom ? `<div class="row"><button class="btn grow" data-act="editEx" data-ex="${id}">Modifier</button><button class="btn danger grow" data-act="delEx" data-ex="${id}">Supprimer</button></div>` : ""}
-    <button class="btn" data-act="close">Fermer</button>`,
+    ${e.custom ? `<div class="row"><button class="btn grow" data-act="editEx" data-ex="${id}">Modifier</button><button class="btn danger grow" data-act="delEx" data-ex="${id}">Supprimer</button></div>` : ""}`,
   sh => {
     if (hasFig) animate(sh.querySelector("#figbox svg"), e.fam, e, true);
     const b = sh.querySelector("#ad-go"); if (b) b.onclick = () => addToDay(+sh.querySelector("#ad-day").value, id);

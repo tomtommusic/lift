@@ -435,9 +435,9 @@ const FAM = {
   stand:{lab:"Debout", k:[{t:0,a:[3,3],l:[0,0,90]}], an:{pt:"A1",at:[100,180]}},
   ohp:{lab:"Développé au-dessus de la tête", k:[{t:0,a:[30,170],l:[0,0,90]},{a:[175,178]}], an:{pt:"A1",at:[96,180]}},
   seatohp:{lab:"Développé assis", k:[{t:-4,a:[30,170],l:[90,0,90]},{a:[175,178]}], an:{pt:"P",at:[84,140]}, props:[...SEAT(60,144,46),["l",72,144,66,88,6]]},
-  bench:{lab:"Couché sur banc, poussée", k:[{t:90,a:[-90,-180],l:[-70,5,-90]},{a:[-178,-178]}], an:{pt:"P",at:[72,124]}, props:BENCH},
-  incline:{lab:"Banc incliné, poussée", k:[{t:55,a:[-55,-145],l:[-80,-5,-90]},{a:[-145,-145]}], an:{pt:"P",at:[70,134]}, props:[["l",76,143,122,111,7],["r",44,141,34,6],["l",60,147,60,184,3],["l",116,118,130,184,3]]},
-  fly:{lab:"Couché, écarté", k:[{t:90,a:[-100,-140],l:[-70,5,-90]},{a:[-176,-182]}], an:{pt:"P",at:[72,124]}, props:BENCH},
+  bench:{lab:"Couché sur banc, poussée", k:[{t:90,press:0,l:[-70,5,-90]},{press:1}], an:{pt:"P",at:[72,124]}, props:BENCH},
+  incline:{lab:"Banc incliné, poussée", k:[{t:55,press:0,l:[-80,-5,-90]},{press:1}], an:{pt:"P",at:[70,134]}, props:[["l",76,143,122,111,7],["r",44,141,34,6],["l",60,147,60,184,3],["l",116,118,130,184,3]]},
+  fly:{lab:"Couché, écarté", k:[{t:90,press:.2,l:[-70,5,-90]},{press:1}], an:{pt:"P",at:[72,124]}, props:BENCH},
   pushup:{lab:"Pompe", k:[{t:75,a:[0,0],l:[-75,-75,10]},{t:84,a:[-70,40],l:[-84,-84,10]}], an:{pt:"T1",at:[36,181]}},
   dips:{lab:"Dips", k:[{t:8,a:[0,0],l:[10,-70,90]},{t:15,a:[-70,10]}], an:{pt:"W1",at:[104,100]}, props:[["l",70,100,140,100,4],["l",80,100,80,184,3],["l",134,100,134,184,3]]},
   pullup:{lab:"Traction", k:[{t:-4,a:[172,176],l:[20,-60,60]},{a:[20,175],l:[25,-60,60]}], an:{pt:"W1",at:[104,16]}, props:[["l",60,16,150,16,4],["l",64,16,64,184,3],["l",146,16,146,184,3]]},
@@ -827,6 +827,8 @@ function solve(k, front, an){
   const arm = (n, a) => { const E = ad(pts["S"+n], mir(dv(a[0]+rel, 28), n===1)); pts["E"+n] = E; pts["W"+n] = ad(E, mir(dv(a[1]+rel, 26*(n === 1 && k.fl != null ? k.fl : 1)), n===1)); };
   const a1 = k.a || [3,3], a2 = k.a2 || a1;
   if (!k.ik1) arm(1, a1); if (!k.ik2) arm(2, a2);
+  /* développé vu de côté, coudes ouverts : le coude descend sous le banc puis remonte à la verticale (bras en raccourci) */
+  if (k.press != null) for (const n of [1,2]){ const S0 = pts["S"+n], ey = 28*(1 - 2*k.press); pts["E"+n] = [S0[0] - 1, S0[1] + ey]; pts["W"+n] = [S0[0] - 1, S0[1] + ey - 26]; }
   let off = [0,0];
   if (an && pts[an.pt]) off = [an.at[0] - pts[an.pt][0], an.at[1] - pts[an.pt][1]];
   const tgt = s => typeof s[0] === "string" ? ad(pts[s[0]], [s[1]||0, s[2]||0]) : [s[0]-off[0], s[1]-off[1]];

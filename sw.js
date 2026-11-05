@@ -1,5 +1,5 @@
 // Lift : fonctionne hors ligne. Change VERSION à chaque mise à jour de l'app.
-const VERSION = "lift-v25";
+const VERSION = "lift-v26";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png", "icons/favicon-32.png", "icons/favicon-64.png"];
 
 self.addEventListener("install", e => {
@@ -11,9 +11,9 @@ self.addEventListener("activate", e => {
 self.addEventListener("fetch", e => {
   const req = e.request;
   if (req.method !== "GET") return;
-  // Pages : réseau d'abord pour avoir la dernière version, cache si hors ligne
+  // Pages : toujours revalider auprès du serveur (GitHub garde ses pages 10 min en cache), copie locale si hors ligne
   if (req.mode === "navigate") {
-    e.respondWith(fetch(req).then(r => { const copy = r.clone(); caches.open(VERSION).then(c => c.put("index.html", copy)); return r; }).catch(() => caches.match("index.html")));
+    e.respondWith(fetch(req, {cache: "no-cache"}).then(r => { const copy = r.clone(); caches.open(VERSION).then(c => c.put("index.html", copy)); return r; }).catch(() => caches.match("index.html")));
     return;
   }
   // Le reste (icônes, polices) : cache d'abord

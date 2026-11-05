@@ -735,13 +735,7 @@ const KEY = "lift.v1";
 let S = null;
 const UI0 = {tab:"accueil", jday:0, chart:true, metric:"e1rm", muscle:"", equip:"", q:"", cat:"m"};
 function seed(){
-  const logs = [], t = today();
-  const bench = [155,160,160,165,165,170,170,175], squat = [205,210,215,215,220,225,230,235];
-  for (let i=0;i<8;i++){
-    const d1 = addDays(t, -56 + i*7);
-    logs.push({id:uid(), d:d1, ex:"bench", sets:[{w:bench[i],r:8},{w:bench[i],r:8},{w:bench[i],r:i%2?6:7}], tempo:"3-1-1-0", note:"", demo:true});
-    logs.push({id:uid(), d:addDays(d1,1), ex:"squat", sets:[{w:squat[i],r:6},{w:squat[i],r:6},{w:squat[i],r:5}], tempo:"3-0-1-0", note:"", demo:true});
-  }
+  const logs = [];
   return {v:2, units:{w:"lb",h:"imp"}, profile:{name:"",sex:"M",age:"",hcm:"",wlb:"",bf:"",act:1.55}, weights:[], programs:[], active:null, draft:null, logs, custom:[], imgs:{}, ui:{...UI0}};
 }
 function migrate(o){
@@ -754,6 +748,7 @@ function load(){
   normalize();
 }
 function normalize(){
+  S.logs = (S.logs || []).filter(l => !l.demo);
   delete S.heroImg; delete S.heroMode;
   S.ui = Object.assign({}, UI0, S.ui||{});
   S.custom = S.custom || []; S.imgs = S.imgs || {}; S.weights = S.weights || []; S.programs = S.programs || []; S.logs = S.logs || [];

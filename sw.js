@@ -1,5 +1,5 @@
 // Lift : fonctionne hors ligne. Change VERSION à chaque mise à jour de l'app.
-const VERSION = "lift-v14";
+const VERSION = "lift-v15";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png", "icons/icon.svg"];
 
 self.addEventListener("install", e => {

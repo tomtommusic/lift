@@ -162,7 +162,7 @@ p{margin:0}
 .fl2{stroke:var(--fig2);stroke-linecap:round;stroke-linejoin:round;fill:none}
 .bfgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .bftile{appearance:none;background:var(--surface2);border:1px solid var(--line);border-radius:16px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--ink);text-align:center}
-.bftile svg{display:block;width:100%;max-width:120px;height:auto;margin:0 auto}
+.bftile svg{display:block;width:100%;max-width:96px;height:auto;margin:0 auto}
 .bftile b{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
 .bftile span{font-size:12px;color:var(--muted);line-height:1.25}
 .bftile[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
@@ -174,7 +174,8 @@ p{margin:0}
 .bfs{fill:#D9A784}
 .bfs2{fill:#DCAB88}
 .bfl{fill:none;stroke:#B47E5C;stroke-width:.8;stroke-linecap:round}
-.bfc{fill:#30343B}
+.bfc{fill:#30343B;stroke:#1E2126;stroke-width:.5}
+.bfn{fill:#B47E5C}
 .fh{fill:var(--fig)}
 .thumb.il-bg,.figbox{background:#EEF1F5}
 .il .fig-floor{stroke:#D3D8DF;stroke-width:2}
@@ -392,25 +393,25 @@ const FAM = {
   straightarm:{lab:"Bras tendus vers le bas", k:[{t:20,a:[150,150],l:[8,-4,90]},{a:[8,8]}], an:{pt:"A1",at:[80,180]}, cab:[186,-4], props:COL(188)},
   bentrow:{lab:"Rowing penché", k:[{t:60,a:[0,0],l:[15,-5,90]},{a:[-60,0]}], an:{pt:"A1",at:[96,180]}},
   csrow:{lab:"Rowing poitrine appuyée", k:[{t:55,a:[8,8],l:[10,-5,90]},{a:[-60,8]}], an:{pt:"A1",at:[80,180]}, props:[["l",83,108,124,79,7],["l",104,97,110,184,3]]},
-  seatedrow:{lab:"Tirage horizontal assis", k:[{t:18,a:[88,90],l:[70,100,60]},{t:-5,a:[-60,85]}], an:{pt:"P",at:[64,140]}, cab:[186,146], props:[...SEAT(34,144,56),["l",150,138,150,174,5],["l",188,60,188,184,4]]},
+  seatedrow:{lab:"Tirage horizontal assis", k:[{t:18,a:[88,90],l:[80,70,60]},{t:-5,a:[-60,30]}], an:{pt:"P",at:[64,140]}, cab:[186,152], props:[...SEAT(34,144,56),["l",147,146,147,176,5],["l",188,60,188,184,4]]},
   facepull:{lab:"Tirage vers le visage", k:[{t:-5,a:[115,115],l:[0,0,90]},{a:[95,215]}], an:{pt:"A1",at:[80,180]}, cab:[190,36], props:COL(192)},
   deadlift:{lab:"Soulevé de terre", k:[{t:60,a:[0,0],l:[75,-20,90]},{t:0,l:[0,0,90]}], an:{pt:"A1",at:[100,180]}, pr:20},
   hinge:{lab:"Charnière de hanche", k:[{t:0,a:[0,0],l:[5,-5,90]},{t:72,l:[12,-4,90]}], an:{pt:"A1",at:[96,180]}},
-  goodmorning:{lab:"Good morning", k:[{t:0,a:[-40,150],l:[5,-5,90]},{t:72,l:[12,-4,90]}], an:{pt:"A1",at:[96,180]}},
+  goodmorning:{lab:"Good morning", k:[{t:0,a:[-10,165],l:[5,-5,90]},{t:72,l:[12,-4,90]}], an:{pt:"A1",at:[96,180]}},
   swing:{lab:"Swing", k:[{t:65,a:[-25,-25],l:[18,-8,90]},{t:0,a:[90,90],l:[0,0,90]}], an:{pt:"A1",at:[96,180]}},
   slrdl:{lab:"Charnière sur une jambe", k:[{t:0,a:[0,0],l:[3,-3,90],l2:[-8,0,90]},{t:80,l:[10,-5,90],l2:[-78,-80,0]}], an:{pt:"A1",at:[100,180]}},
-  squat:{lab:"Squat (charge au dos)", k:[{t:6,a:[-40,150],l:[0,0,90]},{t:40,l:[95,-35,90]}], an:{pt:"A1",at:[100,180]}, mp:[["c@","N",-4,-4,7]]},
+  squat:{lab:"Squat (charge au dos)", k:[{t:6,a:[-10,165],l:[0,0,90]},{t:40,l:[95,-35,90]}], an:{pt:"A1",at:[100,180]}, mp:[["c@","N",-4,-4,7]]},
   frontsquat:{lab:"Squat (charge devant)", k:[{t:4,a:[30,160],l:[0,0,90]},{t:24,l:[96,-38,90]}], an:{pt:"A1",at:[100,180]}},
   deepsquat:{lab:"Squat profond", k:[{t:30,a:[90,90],l:[105,-40,90]}], an:{pt:"A1",at:[100,180]}},
   legpress:{lab:"Presse à cuisses", k:[{t:-60,a:[30,60],l:[165,80,210]},{l:[130,130,210]}], an:{pt:"P",at:[64,140]}, props:[["l",58,150,14,124,7],["l",46,148,86,148,6],["l",96,156,190,66,3],["s@","A1",3,-3,40,44,5]]},
   presscalf:{lab:"Mollets à la presse", k:[{t:-60,a:[30,60],l:[130,130,195]},{l:[130,130,150]}], an:{pt:"P",at:[64,140]}, props:[["l",58,150,14,124,7],["l",46,148,86,148,6],["l",96,156,190,66,3],["s@","T1",-2,-2,40,44,5]]},
   legext:{lab:"Extension des jambes", k:[{t:-6,a:[20,40],l:[90,4,90]},{l:[90,88,180]}], an:{pt:"P",at:[84,128]}, props:[["r",56,132,48,6],["l",66,132,60,80,6],["l",80,138,80,184,3],["c@","A1",0,-4,6]]},
   seatlegcurl:{lab:"Flexion des jambes assis", k:[{t:-8,a:[20,40],l:[90,90,180]},{l:[90,-10,90]}], an:{pt:"P",at:[84,128]}, props:[["r",56,132,48,6],["l",66,132,60,80,6],["l",80,138,80,184,3],["c@","A1",0,7,6],["c@","K1",-6,-9,6]]},
-  legcurl:{lab:"Flexion des jambes couché", k:[{t:90,a:[60,10],l:[-90,-90,0]},{l:[-90,-210,0]}], an:{pt:"P",at:[92,120]}, props:[["r",8,127,146,7],["l",24,134,24,184,3],["l",140,134,140,184,3],["c@","A1",0,-2,6]]},
+  legcurl:{lab:"Flexion des jambes couché", k:[{t:90,a:[20,60],l:[-90,-90,0]},{l:[-90,-210,0]}], an:{pt:"P",at:[92,120]}, props:[["r",8,127,146,7],["l",24,134,24,184,3],["l",140,134,140,184,3],["c@","A1",0,-2,6]]},
   lunge:{lab:"Fente", k:[{t:3,a:[0,0],l:[20,-10,90],l2:[-25,-30,60]},{l:[85,-10,90],l2:[-5,-85,90]}], an:{pt:"A1",at:[126,180]}},
   bulg:{lab:"Fente pied arrière surélevé", k:[{t:5,a:[0,0],l:[20,-10,90],l2:[0,-95,-90],ikA2:[56,146]},{t:8,l:[85,-10,90]}], an:{pt:"A1",at:[128,180]}, props:[["r",30,150,50,8],["l",38,158,38,184,3],["l",72,158,72,184,3]]},
   stepup:{lab:"Montée sur banc", k:[{t:12,a:[0,0],l:[80,-15,90],l2:[-10,-10,90]},{t:0,l:[0,0,90],l2:[30,-50,60]}], an:{pt:"A1",at:[130,156]}, props:[["r",104,156,60,28]]},
-  hipthrust:{lab:"Hip thrust", k:[{t:72,ik1:["P",0,-6],ik2:["P",0,-6],ba:"u",l:[-130,-10,-90]},{t:90,l:[-90,0,-90]}], an:{pt:"A1",at:[62,180]}, impl:"P", props:[["r",146,148,48,7],["l",152,155,152,184,3],["l",188,155,188,184,3]], mp:[["c@","P",0,-8,7]]},
+  hipthrust:{lab:"Hip thrust", k:[{t:72,ik1:["P",0,-6],ik2:["P",0,-6],ba:"d",l:[-130,-10,-90]},{t:90,l:[-90,0,-90]}], an:{pt:"A1",at:[62,180]}, impl:"P", props:[["r",146,148,48,7],["l",152,155,152,184,3],["l",188,155,188,184,3]], mp:[["c@","P",0,-8,7]]},
   bridge:{lab:"Pont fessier", k:[{t:100,a:[-75,-90],l:[-140,-12,-90]},{t:115,l:[-110,0,-90]}], an:{pt:"A1",at:[70,180]}, impl:"P"},
   abd:{lab:"Abduction de hanche (de face)", v:"front", k:[{t:0,a:[30,10],l:[2,0,90],l2:[3,0,90]},{l2:[32,32,90]}], an:{pt:"A1",at:[92,180]}, cab:[40,182], cabAt:"A2", band:"ankles", mp:[["c@","A2",4,-10,5]]},
   add:{lab:"Adduction de hanche (de face)", v:"front", k:[{t:0,a:[30,10],l:[2,0,90],l2:[32,32,90]},{l2:[3,0,90]}], an:{pt:"A1",at:[92,180]}, cab:[190,182], cabAt:"A2", mp:[["c@","A2",-4,-10,5]]},
@@ -430,8 +431,8 @@ const FAM = {
   benchdip:{lab:"Dips entre bancs", k:[{t:0,a:[-15,-15],l:[85,15,90]},{a:[-100,-20],l:[120,10,90]}], an:{pt:"W1",at:[62,140]}, props:[["r",30,140,44,8],["l",36,148,36,184,3],["l",68,148,68,184,3]]},
   seatdip:{lab:"Dips assis", k:[{t:-4,a:[-70,20],l:[90,0,90]},{a:[-8,-8]}], an:{pt:"P",at:[80,140]}, props:[...SEAT(56,144,48),["l",68,144,62,88,6],["c@","W1",0,0,4]]},
   seatpress:{lab:"Poussée assise à la machine", k:[{t:-6,a:[-50,100],l:[90,0,90]},{a:[88,92]}], an:{pt:"P",at:[80,140]}, props:[...SEAT(56,144,50),["l",70,144,64,84,7],["c@","W1",0,0,4]]},
-  crossover:{lab:"Croisé à la poulie haute", k:[{t:12,a:[-70,-40],l:[12,-6,90],l2:[-20,-10,70]},{a:[60,70]}], an:{pt:"A1",at:[110,180]}, cab:[14,-4], props:COL(10)},
-  crosslow:{lab:"Croisé à la poulie basse", k:[{t:8,a:[-30,-20],l:[12,-6,90],l2:[-20,-10,70]},{a:[125,135]}], an:{pt:"A1",at:[110,180]}, cab:[14,178], props:COL(10)},
+  crossover:{lab:"Croisé à la poulie haute", k:[{t:12,a:[-70,-40],l:[12,-6,90],l2:[-20,-26,70]},{a:[60,70]}], an:{pt:"A1",at:[110,180]}, cab:[14,-4], props:COL(10)},
+  crosslow:{lab:"Croisé à la poulie basse", k:[{t:8,a:[-30,-20],l:[12,-6,90],l2:[-20,-26,70]},{a:[125,135]}], an:{pt:"A1",at:[110,180]}, cab:[14,178], props:COL(10)},
   pecdeck:{lab:"Pec deck (de face)", v:"front", k:[{t:0,thl:.35,l:[12,0,90],ik1:["N",-56,6],ik2:["N",56,6],ba:"d"},{ik1:["N",-4,18],ik2:["N",4,18]}], an:{pt:"P",at:[100,128]}, props:[["r",86,64,28,66],["r",76,126,48,6]]},
   revpecdeck:{lab:"Pec deck inversé (de face)", v:"front", k:[{t:0,thl:.35,l:[12,0,90],ik1:["N",-6,18],ik2:["N",6,18],ba:"d"},{ik1:["N",-62,4],ik2:["N",62,4]}], an:{pt:"P",at:[100,128]}, props:[["r",76,126,48,6]]},
   latraise:{lab:"Élévation latérale (de face)", v:"front", k:[{t:0,a:[8,4],l:[2,0,90]},{a:[86,82]}], an:{pt:"A1",at:[92,180]}, cab:[150,182]},
@@ -440,7 +441,7 @@ const FAM = {
   reardelt:{lab:"Oiseau penché", k:[{t:72,a:[2,2],l:[15,-5,90]},{a:[-75,-70]}], an:{pt:"A1",at:[96,180]}},
   plank:{lab:"Planche", k:[{t:82,hd:-6,a:[0,90],l:[-82,-82,10]}], an:{pt:"T1",at:[36,181]}},
   sideplank:{lab:"Planche latérale", k:[{t:82,a:[0,90],a2:[178,178],l:[-82,-82,10]}], an:{pt:"T1",at:[36,181]}},
-  copenhagen:{lab:"Planche Copenhague", k:[{t:86,a:[0,90],a2:[176,176],l:[-86,-86,-90],l2:[-75,-60,-90]}], an:{pt:"A1",at:[40,163]}, props:[["r",14,166,52,7],["l",20,173,20,184,3],["l",60,173,60,184,3]]},
+  copenhagen:{lab:"Planche Copenhague", k:[{t:86,a:[0,90],a2:[176,176],l:[-86,-86,-90],l2:[-60,-75,-90]}], an:{pt:"A1",at:[40,163]}, props:[["r",14,166,52,7],["l",20,173,20,184,3],["l",60,173,60,184,3]]},
   crunch:{lab:"Enroulement au sol", k:[{t:94,a:[-80,-95],l:[-140,-30,-90]},{t:60,a:[-60,-70]}], an:{pt:"P",at:[108,176]}},
   seatcrunch:{lab:"Enroulement assis", k:[{t:-4,rel:1,a:[30,160],l:[90,0,90]},{t:35}], an:{pt:"P",at:[84,140]}, props:SEAT(60,144,48)},
   hlr:{lab:"Relevé de jambes suspendu", k:[{t:-4,a:[172,176],l:[4,-4,90]},{l:[95,95,180]}], an:{pt:"W1",at:[104,-2]}, props:BAR_HI},
@@ -455,7 +456,7 @@ const FAM = {
   openbook:{lab:"Quatre pattes, rotation du haut du dos", k:[{t:90,a:[2,2],a2:[0,0],l:[0,-90,-90]},{a:[178,178]}], an:{pt:"K1",at:[70,172]}},
   childpose:{lab:"Posture de l'enfant", k:[{t:90,a:[0,0],l:[0,-90,-90]},{t:108,a:[96,96],l:[65,-90,-90]}], an:{pt:"K1",at:[100,174]}},
   hipflexor:{lab:"Fente à genou, étirement", k:[{t:0,a:[-25,40],l:[90,0,90],l2:[0,0,-90],ikA2:[40,178]},{t:-6,a:[178,178],l:[95,-25,90],ikA2:[52,178]}], an:{pt:"A1",at:[128,180]}},
-  wgs:{lab:"Fente avec rotation", k:[{t:70,a:[0,0],a2:[0,0],l:[85,-15,90],l2:[0,0,60],ikA2:[40,178],bl:"u"},{a:[178,178]}], an:{pt:"A1",at:[130,180]}},
+  wgs:{lab:"Fente avec rotation", k:[{t:70,a:[0,0],a2:[0,0],l:[85,-15,90],l2:[0,0,60],ikA2:[40,178],bl:"d"},{a:[178,178]}], an:{pt:"A1",at:[130,180]}},
   kneetowall:{lab:"Genou vers le mur", k:[{t:4,ik1:[160,104],ik2:[160,104],l:[90,0,90],l2:[0,0,-90],ikA2:[44,178]},{l:[100,-28,90],ikA2:[52,178]}], an:{pt:"A1",at:[130,180]}, props:[["l",163,30,163,184,4]]},
   sitreach:{lab:"Assis, penché vers les pieds", k:[{t:10,a:[60,60],l:[90,90,180]},{t:58,a:[96,96]}], an:{pt:"P",at:[80,176]}},
   quadstretch:{lab:"Étirement du quadriceps debout", k:[{t:0,a:[60,70],ik2:["A2",0,0],ba:"b",l:[0,0,90],l2:[0,-168,-90]},{t:-3,l2:[-10,-165,-90]}], an:{pt:"A1",at:[100,180]}},
@@ -465,16 +466,16 @@ const FAM = {
   deadhang:{lab:"Suspension", k:[{t:-4,a:[172,176],l:[4,-4,90]}], an:{pt:"W1",at:[104,-2]}, props:BAR_HI},
   extrot:{lab:"Rotation externe de l'épaule (de face)", v:"front", k:[{t:0,a:[2,-85],a2:[3,3],l:[2,0,90]},{a:[2,55]}], an:{pt:"A1",at:[92,180]}, cab:[190,112]},
   introt:{lab:"Rotation interne de l'épaule (de face)", v:"front", k:[{t:0,a:[2,55],a2:[3,3],l:[2,0,90]},{a:[2,-85]}], an:{pt:"A1",at:[92,180]}, cab:[10,112]},
-  sideer:{lab:"Couché sur le côté, rotation externe", k:[{t:90,a:[-88,0],a2:[20,90],l:[-92,-92,-90]},{a:[-88,170]}], an:{pt:"P",at:[90,170]}},
+  sideer:{lab:"Couché sur le côté, rotation externe", k:[{t:90,a:[-88,2],fl:1,a2:[20,90],l:[-92,-92,-90]},{fl:-1}], an:{pt:"P",at:[90,170]}},
   pronety:{lab:"Couché sur le ventre, bras en Y", k:[{t:90,a:[10,10],l:[-90,-90,0]},{a:[128,128]}], an:{pt:"P",at:[60,124]}, props:PRONE},
   pronett:{lab:"Couché sur le ventre, bras en T", k:[{t:90,a:[5,5],l:[-90,-90,0]},{a:[176,176]}], an:{pt:"P",at:[60,124]}, props:PRONE},
-  pronetw:{lab:"Couché sur le ventre, bras en W", k:[{t:90,a:[5,5],l:[-90,-90,0]},{a:[-150,140]}], an:{pt:"P",at:[60,124]}, props:PRONE},
+  pronetw:{lab:"Couché sur le ventre, bras en W", k:[{t:90,a:[5,5],l:[-90,-90,0]},{a:[-150,-55]}], an:{pt:"P",at:[60,124]}, props:PRONE},
   pullapart:{lab:"Écarté des bras (de face)", v:"front", k:[{t:0,ik1:["N",-8,14],ik2:["N",8,14],l:[2,0,90]},{ik1:["N",-66,4],ik2:["N",66,4]}], an:{pt:"A1",at:[92,180]}, band:"hands"},
   pallof:{lab:"Presse anti-rotation", k:[{t:0,a:[20,150],l:[8,-6,90]},{a:[88,90]}], an:{pt:"A1",at:[92,180]}, cab:[186,96], props:COL(190)},
-  clamshell:{lab:"Couché sur le côté, ouverture du genou", k:[{t:90,a:[-80,-90],a2:[25,90],l:[-65,-100,-90],l2:[-65,-100,-90]},{l2:[-95,-60,-90]}], an:{pt:"P",at:[110,164]}, band:"knees"},
+  clamshell:{lab:"Couché sur le côté, ouverture du genou", k:[{t:90,a:[-80,-70],a2:[25,90],l:[-65,-100,-90],l2:[-65,-100,-90]},{l2:[-82,-112,-90]}], an:{pt:"P",at:[110,164]}, band:"knees"},
   sideabd:{lab:"Couché sur le côté, jambe levée", k:[{t:90,a:[-88,-88],a2:[20,90],l:[-92,-92,-90],l2:[-92,-92,-90]},{l2:[-125,-125,-90]}], an:{pt:"P",at:[110,170]}},
   bandwalk:{lab:"Marche latérale (de face)", v:"front", k:[{t:0,a:[20,10],l:[14,0,90],l2:[4,0,90]},{l:[4,0,90],l2:[14,0,90]}], an:{pt:"P",at:[100,102]}, band:"ankles"},
-  balance:{lab:"Équilibre sur une jambe", k:[{t:0,a:[30,20],a2:[30,20],l:[0,0,90],l2:[70,-10,90]},{t:3,a:[35,25],a2:[35,25],l2:[80,-5,90]}], an:{pt:"A1",at:[100,180]}},
+  balance:{lab:"Équilibre sur une jambe", k:[{t:0,a:[30,45],a2:[30,45],l:[0,0,90],l2:[70,-10,90]},{t:3,a:[35,50],a2:[35,50],l2:[80,-5,90]}], an:{pt:"A1",at:[100,180]}},
   farmer:{lab:"Marche avec charges", k:[{t:0,a:[0,0],a2:[0,0],l:[18,-5,90],l2:[-15,-25,60]},{l:[-15,-25,60],l2:[18,-5,90]}], an:{pt:"P",at:[100,100]}},
   wallsit:{lab:"Chaise au mur", k:[{t:0,a:[2,2],l:[90,0,90]}], an:{pt:"A1",at:[112,180]}, props:[["l",68,30,68,184,4]]},
   spanish:{lab:"Squat espagnol", k:[{t:10,a:[90,90],l:[90,-28,90]}], an:{pt:"A1",at:[112,180]}, band:[12,150], bandAt:"K1", props:[["l",8,120,8,184,4]]},
@@ -770,7 +771,7 @@ function solve(k, front, an){
   const leg = (n, l) => { const K = ad(pts["P"+n], mir(dv(l[0], 40*thl), n===1)); const A = ad(K, mir(dv(l[1], 40), n===1)); pts["K"+n] = K; pts["A"+n] = A; pts["T"+n] = foot(n, A, l[2]); };
   if (!k.ikA1) leg(1, l1); if (!k.ikA2) leg(2, l2);
   const rel = k.rel ? t : 0;
-  const arm = (n, a) => { const E = ad(pts["S"+n], mir(dv(a[0]+rel, 28), n===1)); pts["E"+n] = E; pts["W"+n] = ad(E, mir(dv(a[1]+rel, 26), n===1)); };
+  const arm = (n, a) => { const E = ad(pts["S"+n], mir(dv(a[0]+rel, 28), n===1)); pts["E"+n] = E; pts["W"+n] = ad(E, mir(dv(a[1]+rel, 26*(n === 1 && k.fl != null ? k.fl : 1)), n===1)); };
   const a1 = k.a || [3,3], a2 = k.a2 || a1;
   if (!k.ik1) arm(1, a1); if (!k.ik2) arm(2, a2);
   let off = [0,0];
@@ -1062,51 +1063,66 @@ function smoothClosed(pts){
   return d + "Z";
 }
 function bfFig(sex, bf){
-  const F = sex === "F", c = 50, k = Math.max(0, bf - 12), cl = (v,a,b) => Math.max(a, Math.min(b, v));
-  const belly = Math.max(0, bf - (F ? 30 : 22));
-  const waist = F ? 10.5 + k*.30 : 12.8 + k*.36;
-  const hip = F ? 17.5 + bf*.11 : 15.2 + bf*.07;
-  const chest = (F ? 14.5 : 17.5) + bf*.05;
-  const sh = (F ? 19.5 : 23.5) + Math.max(0, 15 - bf)*.12, armOut = Math.max(0, bf - 18)*.14, aw = (F ? 3.6 : 4.6) + bf*.045;
-  const thighO = (F ? 17 : 15.6) + bf*.1 + (F ? bf*.03 : 0), thighI = cl((F ? 2.6 : 3.4) - bf*.05, .6, 4), knee = (F ? 11.5 : 12.6) + bf*.03;
-  const calf = (F ? 12 : 13.2) + bf*.03;
-  const ax = Math.max(sh + armOut, Math.max(chest + 1, waist + belly*.15) + aw + 1.6); // bord externe du bras, toujours détaché du tronc
-  const R = [
-    [5 + bf*.03, 24],[11 + armOut*.3, 28],[ax - 4.5, 31],[ax, 37],[ax + 1, 47],[ax + 1.2, 60],[ax + 1.6, 71],[ax + .8, 83],[ax + 1.6, 91],[ax - .2, 97],
-    [ax - aw*.85, 92],[ax - aw*.75, 84],[ax - aw*.95, 72],[ax - aw - .6, 61],[ax - aw - 1, 51],
-    [chest - .5, 44],[chest, 54],[waist + belly*.15, 66],[waist + belly*.55, 76],[hip - 1 + belly*.35, 84],[hip, 92],
-    [thighO, 106],[knee + 1, 124],[knee, 130],[calf, 140],[9.6, 158],[10.8, 164],[7.5, 167.5],[4.8, 164],[5, 157],[5.2, 140],[4.2, 128],[thighI + 1, 112],[thighI, 101],[.6, 95]
-  ];
-  const pts = [...R, ...R.slice().reverse().map(([x,y]) => [-x,y])].map(([x,y]) => [c + x, y]);
-  const dOp = cl((F ? 24 : 21) - bf, 0, 10)/10, fOp = cl((bf - (F ? 30 : 24))/10, 0, 1);
+  const F = sex === "F", c = 50, k = Math.max(0, bf - (F ? 16 : 10)), K = Math.max(0, bf - (F ? 28 : 22));
+  const cl = (v,a,b) => Math.max(a, Math.min(b, v)), lerp = (a, b, t) => a + (b-a)*t;
+  /* contour du tronc et des jambes (moitié droite), du cou à la cheville */
+  const neck = (F ? 4.6 : 5.6) + bf*.03;
+  const shoulder = F ? 16.5 : 19.5 + cl(15 - bf, 0, 8)*.15;
+  const rib = (F ? 13.6 : 16.2) + k*.2, waist = (F ? 11.6 : 14.4) + k*.36 + K*.15, iliac = (F ? 15.6 : 15.2) + k*.34 + K*.2;
+  const hip = (F ? 18.4 : 16.4) + k*.22, thighO = (F ? 17.6 : 16.6) + k*.2, thighI = cl((F ? 2.4 : 3.2) - k*.11, .4, 4);
+  const knee = (F ? 11.4 : 12.4) + k*.06, calf = (F ? 12.2 : 13.4) + k*.07, ankle = F ? 8.6 : 9.4;
+  const bustY = 50 + bf*.12;
+  const T = [[neck,26],[neck+.4,32],[shoulder-6,35.5],[shoulder,38.5]];
+  const LEG = [[rib+.3,50],[rib+K*.15,60],[waist,72+K*.1],[iliac,82],[hip,92],[thighO,104],[lerp(thighO,knee,.45)+.6,120],[knee+.8,138],[knee,146],[calf,157],[lerp(calf,ankle,.55),172],[ankle,186],[ankle+1.4,192],[ankle-1.2,196.4],[4.2,196.4],[4.2,187],[4.6,172],[5.4,157],[4.5,146],[lerp(4.5,thighI,.5)+.4,128],[thighI+.3,114],[.5,105]];
+  /* bras : épaule → main → aisselle */
+  const ox = Math.max(0, rib + 1.6 - (F ? 15.6 : 18.4)) + K*.06;
+  const aT = (F ? 3.3 : 4.2) + bf*.05;
+  const A = [[shoulder+3+ox*.6,43],[shoulder+4.4+ox,51],[shoulder+4.2+ox+aT*.2,60],[shoulder+3.6+ox,70],[shoulder+4.4+ox,78],[shoulder+3.4+ox,92],[shoulder+4+ox,100],[shoulder+2.6+ox,110],[shoulder+1+ox,111.5],[shoulder-.4+ox,104],[shoulder-.6+ox,97],[shoulder-.6+ox-aT*.1,92],[shoulder-1.4+ox-aT*.25,80],[shoulder-1.2+ox-aT*.25,70],[shoulder-1.4+ox-aT*.35,60],[shoulder-2.6+ox*.6,50]];
+  const R = [...T, ...A, ...LEG];
+  const pts = [...R, ...R.slice().reverse().map(([x,y]) => [-x,y])].map(([x,y]) => [c+x, y]);
+  const hx = (F ? 7.6 : 8) + bf*.04, hy = 10.6;
+  const dOp = cl(((F ? 24 : 20) - bf)/10, 0, 1), fOp = cl((bf - (F ? 30 : 24))/12, 0, 1);
   let s = "";
-  if (F) s += `<path class="bfh" d="M${c-9.5},16 Q${c-11},2 ${c},2 Q${c+11},2 ${c+9.5},16 Q${c+11},26 ${c+7},30 L${c-7},30 Q${c-11},26 ${c-9.5},16Z"/>`;
+  if (F) s += `<path class="bfh" d="M${c-hx-1.6},16 Q${c-hx-2},2 ${c},2.4 Q${c+hx+2},2 ${c+hx+1.6},16 Q${c+hx+3},30 ${c+hx},36 L${c+5},34 L${c-5},34 L${c-hx},36 Q${c-hx-3},30 ${c-hx-1.6},16Z"/>`;
   s += `<path class="bfb" d="${smoothClosed(pts)}"/>`;
-  s += `<ellipse class="bfb" cx="${c}" cy="13.5" rx="${F ? 7 : 7.4}" ry="9.4"/>`;
-  s += `<path class="bfh" d="M${c-7.6},12 Q${c-6},3.5 ${c},4 Q${c+6},3.5 ${c+7.6},12 Q${c+3},7.5 ${c},8.4 Q${c-3},7.5 ${c-7.6},12Z"/>`;
+  s += `<ellipse class="bfb" cx="${c-hx+.2}" cy="17" rx="1.6" ry="2.6"/><ellipse class="bfb" cx="${c+hx-.2}" cy="17" rx="1.6" ry="2.6"/>`;
+  s += `<ellipse class="bfb" cx="${c}" cy="15" rx="${hx}" ry="${hy}"/>`;
+  s += F ? `<path class="bfh" d="M${c-hx-.4},14 Q${c-hx+1},4.4 ${c},4.6 Q${c+hx-1},4.4 ${c+hx+.4},14 Q${c+2},8.6 ${c-2},9.6 Q${c-hx+2},11 ${c-hx-.4},14Z"/>`
+         : `<path class="bfh" d="M${c-hx-.2},13 Q${c-hx},4.2 ${c},4.4 Q${c+hx},4.2 ${c+hx+.2},13 Q${c+hx-1.4},8.2 ${c+2},8 Q${c-hx+1.6},8 ${c-hx-.2},13Z"/>`;
   // ombres de volume
-  s += `<path class="bfs" opacity=".55" d="M${c+waist-2},62 Q${c+waist+.5},76 ${c+hip-1.5},90 L${c+hip-4},90 Q${c+waist-2.5},76 ${c+waist-4},62Z"/>`;
-  s += `<path class="bfs" opacity=".45" d="M${c+ax-1},40 Q${c+ax+.8},55 ${c+ax+.5},68 L${c+ax-1.6},68 Q${c+ax-1.4},55 ${c+ax-2.6},41Z"/>`;
-  if (F){
-    const b = 4.6 + bf*.06;
-    s += `<path class="bfl" opacity=".55" d="M${c-12},${49+b*.3} Q${c-7},${55+b} ${c-1.5},${50+b*.3} M${c+12},${49+b*.3} Q${c+7},${55+b} ${c+1.5},${50+b*.3}"/>`;
-  } else {
-    s += `<path class="bfl" opacity="${(.35 + dOp*.5).toFixed(2)}" d="M${c-15},45 Q${c-8},${52+fOp*3} ${c-1},48 M${c+15},45 Q${c+8},${52+fOp*3} ${c+1},48"/>`;
+  s += `<path class="bfs" opacity=".5" d="M${c+rib-2.2},52 Q${c+waist+.4},72 ${c+hip-1.6},92 L${c+hip-4.4},92 Q${c+waist-2.6},72 ${c+rib-4.4},52Z"/>`;
+  s += `<path class="bfs" opacity=".4" d="M${c+thighO-1.2},106 Q${c+thighO-1},124 ${c+knee+.2},140 L${c+knee-2.2},140 Q${c+thighO-4},124 ${c+thighO-4},106Z"/>`;
+  // détails anatomiques
+  const L = (d, o = 1) => `<path class="bfl" opacity="${o.toFixed(2)}" d="${d}"/>`;
+  s += L(`M${c-3},36.5 Q${c-9},35.4 ${c-15},37.8 M${c+3},36.5 Q${c+9},35.4 ${c+15},37.8`, .55);
+  if (!F){
+    s += L(`M${c-16.5},${45+fOp*2} Q${c-10},${54+fOp*5} ${c-1.2},${50+fOp*3} M${c+16.5},${45+fOp*2} Q${c+10},${54+fOp*5} ${c+1.2},${50+fOp*3}`, .45 + dOp*.4);
+    s += `<circle class="bfn" cx="${c-9.4}" cy="${48.5+fOp*4}" r=".8"/><circle class="bfn" cx="${c+9.4}" cy="${48.5+fOp*4}" r=".8"/>`;
   }
   if (dOp > 0){
-    s += `<g opacity="${dOp.toFixed(2)}">`;
-    s += `<path class="bfl" d="M${c},50 V85"/>`;
-    if ((!F && bf <= 16) || (F && bf <= 20)) for (const [y,h] of [[55,6],[62.5,6],[70,6.5]]) for (const sx of [-1,1]) s += `<rect class="bfs2" opacity=".7" x="${(sx < 0 ? c-5.6 : c+1).toFixed(1)}" y="${y}" width="4.6" height="${h}" rx="1.6"/>`;
-    s += `<path class="bfl" d="M${c-11},76 Q${c-7},86 ${c-2.5},93 M${c+11},76 Q${c+7},86 ${c+2.5},93"/>`;
-    s += `<path class="bfl" d="M${c-ax+2.4},40 Q${c-ax+4.2},46 ${c-ax+3.6},50 M${c+ax-2.4},40 Q${c+ax-4.2},46 ${c+ax-3.6},50"/>`;
-    s += `<path class="bfl" d="M${c-thighO+4},104 Q${c-8},112 ${c-thighI-4},122 M${c+thighO-4},104 Q${c+8},112 ${c+thighI+4},122"/></g>`;
+    s += L(`M${c},53 V${92}`, dOp*.8);
+    if ((!F && bf <= 19) || (F && bf <= 22)){
+      for (const y of [61, 68.5, 76]) s += L(`M${c-6.4},${y} Q${c-3.2},${y+1.6} ${c},${y} Q${c+3.2},${y+1.6} ${c+6.4},${y}`, dOp*.75);
+      s += L(`M${c-6.8},55 Q${c-8.4},70 ${c-6.2},84 M${c+6.8},55 Q${c+8.4},70 ${c+6.2},84`, dOp*.7);
+    }
+    s += L(`M${c-12.6},79 Q${c-8},88 ${c-2.8},95 M${c+12.6},79 Q${c+8},88 ${c+2.8},95`, dOp*.75);
+    s += L(`M${c-shoulder-ox+.4},41 Q${c-shoulder-ox+3},47 ${c-shoulder-ox+2.2},53 M${c+shoulder+ox-.4},41 Q${c+shoulder+ox-3},47 ${c+shoulder+ox-2.2},53`, dOp*.6);
+    s += L(`M${c-thighO+3.6},108 Q${c-9},120 ${c-5.6},136 M${c+thighO-3.6},108 Q${c+9},120 ${c+5.6},136`, dOp*.55);
   }
-  s += `<circle class="bfs2" cx="${c}" cy="${76 + belly*.3}" r="${(.8 + belly*.04).toFixed(2)}"/>`;
-  const hx = hip - .2 + belly*.3, tx = thighO - (thighO - knee - 1)*.4 + .4;
-  s += `<path class="bfc" d="M${c-hx},${86+belly*.15} Q${c},${88+belly*.4} ${c+hx},${86+belly*.15} L${c+tx},113 L${c+thighI+.3},113 L${c},100 L${c-thighI-.3},113 L${c-tx},113 Z"/>`;
-  if (F){ const b = 4.6 + bf*.06; s += `<path class="bfc" d="M${c-chest+.2},${45} Q${c-7},${54+b*.6} ${c},${49+b*.35} Q${c+7},${54+b*.6} ${c+chest-.2},${45} L${c+chest-1.4},${42} Q${c},${46} ${c-chest+1.4},${42} Z M${c-8},43 L${c-10.5},30 L${c-9},30 L${c-6.5},43 Z M${c+8},43 L${c+10.5},30 L${c+9},30 L${c+6.5},43 Z"/>`; }
-  if (fOp > 0) s += `<path class="bfl" opacity="${fOp.toFixed(2)}" d="M${c-waist-belly*.4+3},${83+belly*.25} Q${c},${90+belly*.45} ${c+waist+belly*.4-3},${83+belly*.25}"/>`;
-  return `<svg viewBox="8 -2 84 174" aria-hidden="true">${s}</svg>`;
+  s += L(`M${c-knee+2.4},145 Q${c-8},148.5 ${c-5.2},145 M${c+knee-2.4},145 Q${c+8},148.5 ${c+5.2},145`, .45);
+  s += `<ellipse class="bfn" cx="${c}" cy="${84 + K*.12}" rx=".9" ry="${(1 + K*.03).toFixed(2)}"/>`;
+  if (fOp > 0) s += L(`M${c-waist-K*.1+2.6},${89+K*.1} Q${c},${95+K*.25} ${c+waist+K*.1-2.6},${89+K*.1}`, fOp*.8);
+  if (fOp > .3) s += L(`M${c-rib+1},63 Q${c-rib+3.2},66 ${c-rib+1.4},69 M${c+rib-1},63 Q${c+rib-3.2},66 ${c+rib-1.4},69`, fOp*.6);
+  // vêtements
+  const sx = y => { for (let i=0;i<LEG.length-1;i++){ const [x0,y0] = LEG[i], [x1,y1] = LEG[i+1]; if (y >= y0 && y <= y1) return x0 + (x1-x0)*(y-y0)/(y1-y0); } return LEG[0][0]; };
+  const top = F ? 90 : 89, bot = F ? 112 : 117, inner = lerp(thighI+.3, .5, (bot-114 < 0 ? 0 : 0)) ;
+  s += `<path class="bfc" d="M${f1(c-sx(top)-.5)},${top} Q${c},${top+1.4} ${f1(c+sx(top)+.5)},${top} L${f1(c+sx(bot)+.5)},${bot} Q${f1(c+thighI+4)},${bot+1} ${f1(c+thighI+.3)},${bot-.6} L${c},${F ? 104 : 105.5} L${f1(c-thighI-.3)},${bot-.6} Q${f1(c-thighI-4)},${bot+1} ${f1(c-sx(bot)-.5)},${bot} Z"/>`;
+  if (F){
+    const b = 4.2 + bf*.07;
+    s += `<path class="bfc" d="M${f1(c-rib-.2)},${bustY-5} Q${f1(c-rib+1)},${bustY+b*.7} ${c-7},${bustY+b*.85} Q${c-1.6},${bustY+b*.6} ${c},${bustY+b*.2} Q${c+1.6},${bustY+b*.6} ${c+7},${bustY+b*.85} Q${f1(c+rib-1)},${bustY+b*.7} ${f1(c+rib+.2)},${bustY-5} Q${c+7},${bustY-7} ${c},${bustY-3} Q${c-7},${bustY-7} ${f1(c-rib-.2)},${bustY-5}Z"/>`;
+    s += `<path class="bfc" d="M${c-9.6},${bustY-6} L${c-11.2},35.6 L${c-10},35.2 L${c-8.2},${bustY-6.4}Z M${c+9.6},${bustY-6} L${c+11.2},35.6 L${c+10},35.2 L${c+8.2},${bustY-6.4}Z"/>`;
+  }
+  return `<svg viewBox="12 0 76 200" aria-hidden="true">${s}</svg>`;
 }
 function bfSheet(){
   let sex = S.profile.sex === "F" ? "F" : "M";

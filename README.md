@@ -4,7 +4,7 @@ Application web de suivi d'entraînement, pensée pour le téléphone.
 
 - Profil (sexe, âge, poids, grandeur, % de gras) et calories de maintien (Mifflin-St Jeor, Katch-McArdle)
 - Programmes enregistrés, programme actif, création sur un canevas vide ou génération automatique
-- Librairie de 141 exercices illustrés et animés : musculation, mobilité, stabilisateurs, tendons
+- Librairie de 186 exercices illustrés et animés : musculation, mobilité, stabilisateurs, tendons
 - Création d'exercices personnalisés avec photo
 - Journal par exercice (poids, reps, tempo, notes), historique et courbes de progression
 - Calcul des disques à mettre sur la barre

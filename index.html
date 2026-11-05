@@ -449,10 +449,10 @@ const FAM = {
   facepull:{lab:"Tirage vers le visage", k:[{t:-5,a:[115,115],l:[0,0,90]},{a:[95,215]}], an:{pt:"A1",at:[80,180]}, cab:[190,36], props:COL(192)},
   deadlift:{lab:"Soulevé de terre", k:[{t:60,a:[0,0],l:[75,-20,90]},{t:0,l:[0,0,90]}], an:{pt:"A1",at:[100,180]}, pr:20},
   hinge:{lab:"Charnière de hanche", k:[{t:0,a:[0,0],l:[5,-5,90]},{t:72,l:[12,-4,90]}], an:{pt:"A1",at:[96,180]}},
-  goodmorning:{lab:"Good morning", k:[{t:0,ik1:["N",-9,-1],ik2:["N",-9,-1],ba:"d",l:[5,-5,90]},{t:72,l:[12,-4,90]}], an:{pt:"A1",at:[96,180]}},
+  goodmorning:{lab:"Good morning", k:[{t:0,ik1:["N",-13,4],ik2:["N",-13,4],ba:"d",l:[5,-5,90]},{t:72,l:[12,-4,90]}], an:{pt:"A1",at:[96,180]}},
   swing:{lab:"Swing", k:[{t:65,a:[-25,-25],l:[18,-8,90]},{t:0,a:[90,90],l:[0,0,90]}], an:{pt:"A1",at:[96,180]}},
   slrdl:{lab:"Charnière sur une jambe", k:[{t:0,a:[0,0],l:[3,-3,90],l2:[-8,0,90]},{t:80,l:[10,-5,90],l2:[-78,-80,0]}], an:{pt:"A1",at:[100,180]}},
-  squat:{lab:"Squat (charge au dos)", k:[{t:6,ik1:["N",-9,-1],ik2:["N",-9,-1],ba:"d",l:[0,0,90]},{t:40,l:[95,-35,90]}], an:{pt:"A1",at:[100,180]}, mp:[["c@","N",-4,-4,7]]},
+  squat:{lab:"Squat (charge au dos)", k:[{t:6,ik1:["N",-13,4],ik2:["N",-13,4],ba:"d",l:[0,0,90]},{t:40,l:[95,-35,90]}], an:{pt:"A1",at:[100,180]}, mp:[["c@","N",-4,-4,7]]},
   frontsquat:{lab:"Squat (charge devant)", k:[{t:4,a:[30,160],l:[0,0,90]},{t:24,l:[96,-38,90]}], an:{pt:"A1",at:[100,180]}},
   deepsquat:{lab:"Squat profond", k:[{t:30,a:[90,90],l:[105,-40,90]}], an:{pt:"A1",at:[100,180]}},
   legpress:{lab:"Presse à cuisses", k:[{t:-60,a:[30,60],l:[165,80,210]},{l:[130,130,210]}], an:{pt:"P",at:[64,140]}, props:[["l",58,150,14,124,7],["l",46,148,86,148,6],["l",96,156,190,66,3],["s@","A1",3,-3,40,44,5]]},
@@ -533,6 +533,9 @@ const FAM = {
   spanish:{lab:"Squat espagnol", k:[{t:10,a:[90,90],l:[90,-28,90]}], an:{pt:"A1",at:[112,180]}, band:[12,150], bandAt:"K1", props:[["l",8,120,8,184,4]]},
   isoext:{lab:"Extension de jambe maintenue", k:[{t:-6,a:[20,40],l:[90,60,140]}], an:{pt:"P",at:[84,128]}, props:[["r",56,132,48,6],["l",66,132,60,80,6],["l",80,138,80,184,3],["c@","A1",0,-4,6]]},
   wrist:{lab:"Flexion du poignet", k:[{t:30,a:[10,90],l:[90,0,90],hand:150},{hand:40}], an:{pt:"P",at:[80,140]}, props:SEAT(54,144,46), pr:8},
+  pullover:{lab:"Couché, bras tendus derrière la tête", k:[{t:90,a:[100,100],l:[-70,5,-90]},{a:[176,176]}], an:{pt:"P",at:[72,124]}, props:BENCH},
+  uprow:{lab:"Tirage vertical debout (de face)", v:"front", k:[{t:0,ik1:["N",-8,51],ik2:["N",8,51],ba:"b",ba2:"f",l:[2,0,90]},{ik1:["N",-6,8],ik2:["N",6,8]}], an:{pt:"A1",at:[92,180]}},
+  sidebend:{lab:"Inclinaison latérale (de face)", v:"front", k:[{t:0,a:[3,3],l:[3,0,90]},{t:-16}], an:{pt:"A1",at:[92,180]}},
   nordic:{lab:"Nordic (ischios)", k:[{t:0,rel:1,a:[20,150],l:[0,-90,-90]},{t:55,a:[40,60],l:[-55,-90,-90]}], an:{pt:"K1",at:[70,176]}, props:[["r",20,178,70,6],["c@","A1",0,-6,5]]}
 };
 for (const f of Object.values(FAM)) { if (f.k.length > 1) f.k[1] = Object.assign({}, f.k[0], f.k[1]); }
@@ -637,6 +640,51 @@ const RAW = [
 ["calfseat","Mollets assis","Machine","m","i","calf","","12-20","calfseat","Assis, genoux sous le coussin, avant des pieds sur la marche.|Descends les talons.|Monte le plus haut possible.","Genoux fléchis : cible surtout le soléaire."],
 ["presscalf","Mollets à la presse","Machine","m","i","calf","","12-15","presscalf","Avant des pieds sur le bas de la plateforme, jambes tendues.|Laisse les talons descendre.|Pousse avec les orteils.","Ne verrouille pas complètement les genoux."],
 ["singlecalf","Mollets sur une jambe","Haltères","m","i","calf","","10-15","calf","Sur une marche, une main sur un appui, haltère dans l'autre.|Descends le talon sous la marche.|Monte le plus haut possible.","Corrige les différences entre les deux côtés."],
+["ohext1","Extension triceps à un bras au-dessus de la tête","Haltères","m","i","tri","","10-12","ohext","Debout ou assis, un haltère tenu au-dessus de la tête, bras vertical.|Descends l'haltère derrière la tête en fléchissant le coude.|Remonte bras tendu sans bouger le coude.","Tiens le coude avec l'autre main pour le garder fixe."],
+["ezohext","Extension triceps au-dessus de la tête à la barre EZ","Barre EZ","m","i","tri","","8-12","ohext","Assis, barre EZ tenue au-dessus de la tête, mains rapprochées.|Descends la barre derrière la tête.|Tends les bras sans écarter les coudes.","Un dossier vertical aide à garder le dos droit."],
+["dbskull","Extension couchée aux haltères","Haltères","m","i","tri","","10-12","skull","Couché, haltères au-dessus des épaules, paumes face à face.|Fléchis les coudes pour descendre les haltères de chaque côté de la tête.|Tends les bras sans bouger les coudes.","Les haltères laissent les poignets plus libres que la barre."],
+["crossext","Extension croisée couché à un bras","Haltères","m","i","tri","","10-12","skull","Couché, un haltère au-dessus de l'épaule, l'autre main sur le triceps qui travaille.|Descends l'haltère en diagonale vers l'épaule opposée.|Tends le bras pour revenir.","Charge légère : l'haltère passe au-dessus du visage."],
+["tate","Tate press","Haltères","m","i","tri","","10-12","skull","Couché, haltères au-dessus de la poitrine, paumes vers les pieds.|Plie les coudes vers l'extérieur pour poser les haltères sur la poitrine.|Tends les bras en gardant les coudes ouverts.","Excellent pour la portion latérale du triceps."],
+["jmpress","JM press","Barre","m","c","tri","pec,delt","6-10","bench","Couché, barre au-dessus des épaules, prise un peu plus serrée que les épaules.|Descends la barre vers le haut de la poitrine en avançant les coudes vers les pieds.|Pousse jusqu'aux bras tendus.","Hybride entre la barre au front et le développé serré."],
+["crosscable","Extension triceps croisée à la poulie","Poulie","m","i","tri","","12-15","pushdown","Poulie haute du côté opposé, poignée dans la main.|Tends le bras en diagonale vers le bas, coude près du corps.|Remonte lentement.","Bonne option pour travailler un bras à la fois."],
+["revpushdown","Pushdown prise inversée","Poulie","m","i","tri","fa","12-15","pushdown","Barre à la poulie haute, paumes vers le haut.|Pousse vers le bas jusqu'aux bras tendus, coudes collés.|Remonte lentement.","Cible davantage la portion médiale du triceps."],
+["diamond","Pompes prise serrée (diamant)","Poids du corps","m","c","tri","pec,delt","8-15","pushup","Mains rapprochées sous la poitrine, pouces et index qui se touchent.|Descends en gardant les coudes près du corps.|Pousse jusqu'aux bras tendus.","Genoux au sol pour la version plus facile."],
+["dbcurl","Curl aux haltères en supination","Haltères","m","i","bic","fa","8-12","curl","Debout, haltères le long du corps, paumes vers l'avant.|Monte les haltères en gardant les coudes fixes.|Redescends jusqu'aux bras tendus.","Tourne le petit doigt vers l'extérieur en haut pour mieux contracter."],
+["bayesian","Curl bayésien à la poulie","Poulie","m","i","bic","","10-15","curl","Dos à la poulie basse, un pas en avant, bras tiré vers l'arrière.|Fléchis le coude en gardant le bras derrière le corps.|Redescends jusqu'à l'étirement complet.","Le biceps travaille en position étirée, ce qui favorise l'hypertrophie."],
+["spider","Curl araignée (spider curl)","Haltères","m","i","bic","","10-12","preacher","Poitrine appuyée sur un banc incliné, bras pendants à la verticale.|Monte les haltères sans bouger les coudes.|Redescends lentement.","Le biceps reste sous tension en haut du mouvement."],
+["zottman","Curl Zottman","Haltères","m","i","bic,fa","","8-12","curl","Monte les haltères paumes vers le haut.|En haut, tourne les paumes vers le bas.|Redescends lentement en prise pronation.","Travaille les biceps à la montée et les avant-bras à la descente."],
+["revcurl","Curl prise inversée","Barre EZ","m","i","fa,bic","","10-15","curl","Barre tenue paumes vers le bas.|Monte la barre en gardant les coudes fixes.|Redescends lentement.","Cible le brachioradial et les extenseurs de l'avant-bras."],
+["dragcurl","Curl drag","Barre","m","i","bic","","8-12","curl","Barre tenue contre les cuisses.|Monte la barre en la glissant le long du corps, coudes vers l'arrière.|Redescends en gardant le contact.","Les coudes reculent : l'épaule ne peut pas aider."],
+["ropehammer","Curl marteau à la corde","Poulie","m","i","bic,fa","","10-15","curl","Corde à la poulie basse, prise neutre.|Monte la corde vers les épaules.|Redescends lentement.","Tension continue sur le brachial."],
+["floorpress","Développé au sol aux haltères","Haltères","m","c","pec,tri","delt","8-12","bench","Couché au sol, genoux fléchis, haltères au-dessus de la poitrine.|Descends jusqu'à ce que les bras touchent le sol.|Pousse jusqu'aux bras tendus.","Amplitude réduite, plus douce pour les épaules."],
+["smithbench","Développé couché à la Smith","Machine","m","c","pec","tri,delt","8-12","bench","Banc plat sous la barre guidée.|Descends la barre au bas des pectoraux.|Pousse, puis rebloque la barre.","Permet de pousser près de l'échec sans pareur."],
+["dbpullover","Pull-over à l'haltère","Haltères","m","i","pec,lat","tri","10-12","pullover","Couché, un haltère tenu à deux mains au-dessus de la poitrine.|Descends l'haltère derrière la tête, bras presque tendus.|Ramène-le au-dessus de la poitrine.","Garde les hanches basses et les coudes légèrement fléchis."],
+["declpushup","Pompes pieds surélevés","Poids du corps","m","c","pec,delt","tri","8-15","pushup","Pieds sur un banc, mains au sol.|Descends la poitrine vers le sol.|Pousse jusqu'aux bras tendus.","Cible davantage le haut des pectoraux."],
+["pendlay","Rowing Pendlay","Barre","m","c","lat","bic,trap,lowb","5-8","bentrow","Buste à l'horizontale, barre au sol.|Tire la barre explosivement vers le bas de la poitrine.|Repose la barre au sol à chaque répétition.","Chaque rep repart du sol : pas de triche avec le dos."],
+["sealrow","Rowing couché sur banc (seal row)","Barre","m","c","lat","bic,trap,delt","8-12","csrow","Couché sur le ventre sur un banc haut, bras pendants.|Tire la barre vers le banc en serrant les omoplates.|Redescends jusqu'à l'étirement.","Aucune charge sur le bas du dos."],
+["kroc","Rowing Kroc (haltère lourd)","Haltères","m","c","lat","bic,trap,fa","12-20","bentrow","Une main sur un appui, haltère lourd dans l'autre.|Tire l'haltère vers la hanche avec un peu d'élan.|Redescends jusqu'à l'étirement complet.","Variante à haute répétition, un peu d'élan est accepté."],
+["meadows","Rowing Meadows (landmine)","Barre","m","c","lat","bic,delt","8-12","bentrow","De côté à une barre landmine, prise sur le bout de la barre.|Tire le coude vers le haut et l'arrière.|Redescends jusqu'à l'étirement.","Cible le haut du dos et les dorsaux."],
+["neutralpull","Tractions prise neutre","Poids du corps","m","c","lat","bic,fa","5-10","pullup","Suspendu aux poignées parallèles, paumes face à face.|Monte jusqu'à passer le menton au-dessus des poignées.|Redescends contrôlé.","Souvent plus confortable pour les épaules et les coudes."],
+["onearmpd","Tirage vertical à un bras","Poulie","m","c","lat","bic","10-12","pulldown","Assis ou à genoux, poignée dans une main.|Tire le coude vers la hanche.|Remonte jusqu'à l'étirement.","Pense à descendre l'épaule avant de tirer."],
+["rackpull","Rack pull","Barre","m","c","lowb,glu,trap","ham,fa","3-6","deadlift","Barre posée sur les supports à la hauteur des genoux.|Tire en gardant le dos neutre jusqu'à verrouiller les hanches.|Redescends la barre sur les supports.","Permet de charger lourd la fin du soulevé de terre."],
+["sumodl","Soulevé de terre sumo","Barre","m","c","glu,quad,lowb","add,ham,trap","3-6","deadlift","Pieds très écartés, orteils vers l'extérieur, prise entre les jambes.|Pousse dans le sol en écartant les genoux.|Verrouille les hanches debout.","Buste plus droit qu'en soulevé conventionnel."],
+["trapbar","Soulevé de terre à la trap bar","Barre","m","c","quad,glu,lowb","ham,trap","4-8","deadlift","Debout au centre de la barre hexagonale.|Descends en fléchissant hanches et genoux, prends les poignées.|Pousse dans le sol pour te relever.","Plus facile à apprendre que le soulevé à la barre droite."],
+["uprow","Rowing debout (tirage menton)","Barre EZ","m","c","delt","trap","10-12","uprow","Debout, barre devant les cuisses, prise à la largeur des épaules.|Monte les coudes jusqu'à la hauteur des épaules.|Redescends lentement.","Ne monte pas les coudes plus haut que les épaules."],
+["cableuprow","Rowing debout à la poulie","Poulie","m","c","delt","trap","12-15","uprow","Face à la poulie basse, corde ou barre en main.|Tire les coudes vers le haut et l'extérieur.|Redescends contrôlé.","Tension constante sur les deltoïdes."],
+["landmine","Développé landmine","Barre","m","c","delt,pec","tri","8-12","ohp","Debout, bout de la barre tenu à la hauteur de l'épaule.|Pousse la barre vers le haut et l'avant.|Redescends contrôlé.","Plus doux pour les épaules que le développé vertical."],
+["cablerear","Oiseau à la poulie (croisé inversé)","Poulie","m","i","delt","trap","12-15","revpecdeck","Poulies à la hauteur des épaules, câbles croisés.|Écarte les bras vers l'arrière, bras presque tendus.|Reviens lentement.","Garde les épaules basses."],
+["increar","Oiseau couché sur banc incliné","Haltères","m","i","delt","trap","12-15","reardelt","Poitrine sur un banc incliné, haltères pendants.|Écarte les bras sur les côtés.|Redescends lentement.","Le banc empêche de tricher avec le dos."],
+["stiffdl","Soulevé de terre jambes tendues","Barre","m","c","ham,lowb","glu","6-10","hinge","Debout, barre devant les cuisses, genoux presque tendus.|Descends la barre en reculant les hanches.|Remonte en serrant les fessiers.","Plus d'étirement des ischios que le roumain."],
+["ghr","Glute-ham raise","Machine","m","i","ham","glu,calf","6-10","nordic","Genoux sur le coussin, chevilles bloquées.|Descends le buste vers l'avant en contrôle.|Remonte en fléchissant les genoux.","Un des meilleurs exercices pour les ischios."],
+["sumosquat","Squat sumo à l'haltère","Haltères","m","c","quad,glu,add","","10-12","frontsquat","Pieds très écartés, haltère tenu à deux mains entre les jambes.|Descends en écartant les genoux.|Remonte en poussant dans les talons.","Cible davantage les adducteurs."],
+["boxsquat","Squat sur boîte","Barre","m","c","quad,glu","ham,lowb","5-8","squat","Boîte derrière toi, barre sur le haut du dos.|Descends jusqu'à t'asseoir brièvement sur la boîte.|Remonte en poussant dans le sol.","Aide à apprendre à reculer les hanches."],
+["pullthrough","Tirage entre les jambes à la poulie","Poulie","m","c","glu,ham","","12-15","hinge","Dos à la poulie basse, corde tenue entre les jambes.|Recule les hanches en laissant la corde passer entre les jambes.|Projette les hanches vers l'avant.","Bon exercice pour apprendre la charnière de hanche."],
+["singlebridge","Pont fessier sur une jambe","Poids du corps","m","i","glu","ham","10-15","bridge","Couché, un pied au sol, l'autre jambe levée.|Monte les hanches en poussant dans le talon.|Redescends contrôlé.","Le bassin doit rester à l'horizontale."],
+["donkeycalf","Mollets à la donkey","Machine","m","i","calf","","10-15","calf","Buste penché, hanches sous le coussin.|Descends les talons.|Monte sur la pointe des pieds.","Étire fortement les mollets en bas."],
+["bicycle","Crunch bicyclette","Poids du corps","m","i","abs,obl","","12-20 par côté","crunch","Couché, mains derrière la tête, jambes levées.|Ramène un coude vers le genou opposé en tendant l'autre jambe.|Alterne de côté.","Va lentement : la rotation vient du tronc."],
+["kneeraise","Relevés de genoux suspendu","Poids du corps","m","i","abs","obl","10-15","hlr","Suspendu à la barre.|Monte les genoux vers la poitrine en enroulant le bassin.|Redescends sans balancer.","Version plus facile des relevés de jambes."],
+["sidebend","Inclinaison latérale à l'haltère","Haltères","m","i","obl","","12-15 par côté","sidebend","Debout, un haltère dans une main.|Penche-toi du côté de l'haltère.|Remonte en contractant l'oblique opposé.","Le bassin reste immobile."],
+["hollow","Hollow hold","Poids du corps","m","i","abs","","20-40 s","legraise","Couché sur le dos, bras au-dessus de la tête.|Décolle épaules et jambes du sol, bas du dos plaqué.|Tiens la position.","Plie les genoux pour la version plus facile."],
 ["extrot","Rotation externe à l'élastique","Élastique","stab","","rc","scap","2-3 × 12-15, tenir 1 s","extrot","Coude collé au corps à 90°, élastique tenu du côté opposé.|Tourne l'avant-bras vers l'extérieur.|Reviens lentement.","Une serviette roulée sous le coude aide à le garder en place."],
 ["extrotcable","Rotation externe à la poulie","Poulie","stab","","rc","scap","2-3 × 12-15, tenir 1 s","extrot","Poulie à la hauteur du coude, du côté opposé.|Tourne l'avant-bras vers l'extérieur, coude collé.|Reviens contrôlé.","Charge légère : ce sont de petits muscles."],
 ["introt","Rotation interne à l'élastique","Élastique","stab","","rc","pec","2-3 × 12-15","introt","Élastique attaché du côté du bras qui travaille.|Ramène l'avant-bras vers le ventre, coude collé.|Reviens lentement.","Complète la rotation externe."],
@@ -696,11 +744,11 @@ function rebuildEx(){
 const POOL = {
   squat:["squat","hacksquat","legpress","goblet","bulg"], hinge:["rdl","deadlift","dbrdl","hipthrust","slrdl","bridge"],
   hpush:["bench","dbbench","chestpress","pushup"], ipush:["incdb","incbench","incpress","pushup"], vpush:["ohp","dbsp","machsp","pushup"],
-  hpull:["bbrow","cablerow","csrow","dbrow","tbar"], vpull:["pullup","pulldown","chinup","assistpull"],
+  hpull:["bbrow","cablerow","csrow","dbrow","tbar","sealrow","pendlay"], vpull:["pullup","pulldown","chinup","assistpull"],
   quadiso:["legext","bulg","stepup","lunge"], hamiso:["legcurl","seatlegcurl","nordic","slrdl"], glute:["hipthrust","machthrust","bridge"],
   calf:["calfst","calfseat","singlecalf","presscalf"], lat:["latraise","cablelat","machlat"], rear:["facepull","revpec","reardelt","pullapart"],
-  bic:["bcurl","inccurl","hammer","cablecurl","preacher","ezcurl"], tri:["pushdown","skull","ohext","dips","benchdip","cableohext"],
-  chest:["cross","pecdeck","fly","lowcross"], core:["hlr","cablecrunch","plank","abwheel","deadbug","crunch","legraise"], trap:["shrug","bbshrug"]
+  bic:["bcurl","inccurl","hammer","dbcurl","bayesian","preacher","spider","cablecurl"], tri:["pushdown","skull","ohext","ohext1","dbskull","dips","cableohext","crossext"],
+  chest:["cross","pecdeck","fly","lowcross"], core:["hlr","cablecrunch","plank","abwheel","deadbug","crunch","legraise","kneeraise","bicycle"], trap:["shrug","bbshrug"]
 };
 const SPLITS = {
   full:{label:"Full body", days:[["Full body A",["squat","hpush","hpull","lat","bic","core"]],["Full body B",["hinge","vpush","vpull","quadiso","tri","core:1"]],["Full body C",["squat:1","ipush","hpull:1","hamiso","rear","calf"]]]},
@@ -834,7 +882,7 @@ function solve(k, front, an){
   if (k.ikA1){ const [K,A] = ikSolve(pts.P1, tgt(k.ikA1), 40*thl, 40, k.bl || "d"); pts.K1 = K; pts.A1 = A; pts.T1 = foot(1, A, l1[2]); }
   if (k.ikA2){ const [K,A] = ikSolve(pts.P2, tgt(k.ikA2), 40*thl, 40, k.bl || "d"); pts.K2 = K; pts.A2 = A; pts.T2 = foot(2, A, l2[2]); }
   if (k.ik1){ const [E,W] = ikSolve(pts.S1, tgt(k.ik1), 28, 26, k.ba || "d"); pts.E1 = E; pts.W1 = W; }
-  if (k.ik2){ const [E,W] = ikSolve(pts.S2, tgt(k.ik2), 28, 26, k.ba || "d"); pts.E2 = E; pts.W2 = W; }
+  if (k.ik2){ const [E,W] = ikSolve(pts.S2, tgt(k.ik2), 28, 26, k.ba2 || k.ba || "d"); pts.E2 = E; pts.W2 = W; }
   if (k.hand != null) pts.X1 = ad(pts.W1, dv(k.hand, 11));
   for (const key in pts) pts[key] = [pts[key][0] + off[0], pts[key][1] + off[1]];
   return pts;

@@ -434,7 +434,7 @@ const BAR_HI = [["l",60,-2,150,-2,4],["l",64,-2,64,184,3],["l",146,-2,146,184,3]
 const FAM = {
   stand:{lab:"Debout", k:[{t:0,a:[3,3],l:[0,0,90]}], an:{pt:"A1",at:[100,180]}},
   ohp:{lab:"Développé au-dessus de la tête", k:[{t:0,a:[30,170],l:[0,0,90]},{a:[175,178]}], an:{pt:"A1",at:[96,180]}},
-  seatohp:{lab:"Développé assis", k:[{t:-4,a:[30,170],l:[90,0,90]},{a:[175,178]}], an:{pt:"P",at:[84,140]}, props:[...SEAT(60,144,46),["l",72,144,66,88,6]]},
+  seatohp:{lab:"Développé assis", k:[{t:-4,press:.3,l:[90,0,90]},{press:1}], an:{pt:"P",at:[84,140]}, props:[...SEAT(60,144,46),["l",72,144,66,88,6]]},
   bench:{lab:"Couché sur banc, poussée", k:[{t:90,press:0,l:[-70,5,-90]},{press:1}], an:{pt:"P",at:[72,124]}, props:BENCH},
   incline:{lab:"Banc incliné, poussée", k:[{t:55,press:0,l:[-80,-5,-90]},{press:1}], an:{pt:"P",at:[70,134]}, props:[["l",76,143,122,111,7],["r",44,141,34,6],["l",60,147,60,184,3],["l",116,118,130,184,3]]},
   fly:{lab:"Couché, écarté", k:[{t:90,press:.2,l:[-70,5,-90]},{press:1}], an:{pt:"P",at:[72,124]}, props:BENCH},
@@ -1029,7 +1029,7 @@ function bodyIl(fam, ex, pts){
     if (front) o += lens(S0, E, .3, .88, 0, 9, mc("bic", far)) + lens(E, W, .04, .72, 0, 8.5, mc("fa", far));
     else o += lens(S0, E, .12, .84, -3.4, 8.5, mc("tri", far)) + lens(S0, E, .28, .88, 3.2, 8.5, mc("bic", far)) + lens(E, W, .04, .72, .8, 8.5, mc("fa", far));
     if (pts.X1 && n === 1) o += limb(W, pts.X1, 6, 7, 5, .5, sil(far));
-    o += front ? limb([S0[0] + (n === 1 ? 1 : -1), S0[1]-2], mix(S0, E, .3), 11, 12, 8, .4, mc("delt", far)) : limb(S0, mix(S0, E, .4), 17, 18, 10, .3, mc("delt", far));
+    o += front ? limb([S0[0] + (n === 1 ? 1 : -1), S0[1]-2], mix(S0, E, .3), 11, 12, 8, .4, mc("delt", far)) : (Math.hypot(E[0]-S0[0], E[1]-S0[1]) < 14 ? `<circle class="${mc("delt", far)}" cx="${f1(S0[0])}" cy="${f1(S0[1])}" r="8.5"/>` : limb(S0, mix(S0, E, .4), 17, 18, 10, .3, mc("delt", far)));
     return o;
   };
   let s = legSide(2, true) + (front ? "" : armSide(2, true));

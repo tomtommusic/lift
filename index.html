@@ -162,16 +162,19 @@ p{margin:0}
 .fl2{stroke:var(--fig2);stroke-linecap:round;stroke-linejoin:round;fill:none}
 .bfgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .bftile{appearance:none;background:var(--surface2);border:1px solid var(--line);border-radius:16px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;color:var(--ink);text-align:center}
-.bftile svg{width:100%;max-width:120px;height:auto}
+.bftile svg{display:block;width:100%;max-width:120px;height:auto;margin:0 auto}
 .bftile b{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
 .bftile span{font-size:12px;color:var(--muted);line-height:1.25}
 .bftile[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 .bftile[aria-pressed="true"] b::before{content:"✓ ";color:var(--accent)}
-.bfb{fill:var(--fig)}
-.bfh{fill:#5B616D}
-.bfs{fill:#AEB4BF}
-.bfs2{fill:#B7BDC8}
-.bfl{fill:none;stroke:#9097A3;stroke-width:.9;stroke-linecap:round}
+.bftile .pane{display:block;width:100%;border-radius:10px;padding:6px 0 0;background:#BFDDF6}
+.bftile.f .pane{background:#D9C8F2}
+.bfb{fill:#EDC3A2;stroke:#B9825F;stroke-width:.7}
+.bfh{fill:#6E4A33}
+.bfs{fill:#D9A784}
+.bfs2{fill:#DCAB88}
+.bfl{fill:none;stroke:#B47E5C;stroke-width:.8;stroke-linecap:round}
+.bfc{fill:#30343B}
 .fh{fill:var(--fig)}
 .thumb.il-bg,.figbox{background:#EEF1F5}
 .il .fig-floor{stroke:#D3D8DF;stroke-width:2}
@@ -187,7 +190,20 @@ p{margin:0}
 .il .eqf{fill:#7B8189}
 .il .eql{stroke:#7B8189}
 .il .eqband{stroke:#1F86EE}
-.il .ghost{opacity:.3}
+.il .sil{fill:#D9DDE3}
+.il .sil2{fill:#C2C8D0}
+.il .mu{fill:#E7EAEE;stroke:#F7F8FA;stroke-width:.7}
+.il .mu2{fill:#CDD2D9;stroke:#DCE0E5;stroke-width:.6}
+.il .ghost .mu,.il .ghost .mu2,.il .ghost .mul{display:none}
+.il .mu.fx,.il .mu2.fx{fill:#1F86EE}
+.il .mu2.fx{fill:#1A6CC2}
+.il .mu.fs{fill:#A9D0F8}
+.il .mu2.fs{fill:#8EBCEA}
+.il .mul{stroke:#FFFFFF;stroke-width:1;fill:none;stroke-linecap:round;opacity:.9}
+.il .hd{fill:#D9DDE3;stroke:#FFFFFF;stroke-width:1}
+.il .shoe{fill:#7E848C}
+.il .shoe2{fill:#6C7279}
+.il .ghost{opacity:.28}
 .il .arw{fill:none;stroke:#1F86EE;stroke-width:2.6;stroke-linecap:round}
 .il .arwh{fill:#1F86EE}
 .fb{fill:var(--fig)}
@@ -883,6 +899,66 @@ function arrowSvg(fam, a, b){
   const h1 = [s1[0]-ux*8-uy*5, s1[1]-uy*8+ux*5], h2 = [s1[0]-ux*8+uy*5, s1[1]-uy*8-ux*5];
   return `<path class="arw" d="M${f1(s0[0])},${f1(s0[1])} Q${f1(cpt[0])},${f1(cpt[1])} ${f1(s1[0]-ux*3)},${f1(s1[1]-uy*3)}"/><path class="arwh" d="M${f1(s1[0]+ux*2)},${f1(s1[1]+uy*2)} L${f1(h1[0])},${f1(h1[1])} L${f1(h2[0])},${f1(h2[1])} Z"/>`;
 }
+/* ================= athlète illustré (style planche anatomique) ================= */
+const FA = {delt:["rc"],trap:["scap"],glu:["gmed"],quad:["hipf","add"],lat:["tspine"]};
+function bodyIl(fam, ex, pts){
+  const front = fam.v === "front", PR = ex && ex.p || [], SE = ex && ex.s || [];
+  const hitF = (m, list) => list.includes(m) || (FA[m]||[]).some(a => list.includes(a));
+  const mc = (m, far) => (far ? "mu2" : "mu") + (hitF(m, PR) ? " fx" : hitF(m, SE) ? " fs" : "");
+  const mix = (a, b, t) => [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t];
+  const nrm = (a, b) => { const dx = b[0]-a[0], dy = b[1]-a[1], l = Math.hypot(dx,dy) || 1; return [dy/l, -dx/l]; };
+  const lens = (a, b, t0, t1, off, w, cls, n) => { n = n || nrm(a,b); const p = mix(a,b,t0), q = mix(a,b,t1); return limb([p[0]+n[0]*off, p[1]+n[1]*off], [q[0]+n[0]*off, q[1]+n[1]*off], w*.45, w, w*.35, .45, cls); };
+  const seg = (a, b, w) => `<path class="mul" d="M${f1(a[0])},${f1(a[1])} L${f1(b[0])},${f1(b[1])}"/>`.replace(/ stroke-width="[^"]*"/,"") ;
+  const sil = far => far ? "sil2" : "sil";
+  const legSide = (n, far) => {
+    const P = pts["P"+n], K = pts["K"+n], A = pts["A"+n], T = pts["T"+n];
+    let o = limb(P, K, 17, 22, 11, .42, sil(far)) + limb(K, A, 10, 15, 6, .3, sil(far));
+    if (front){ const inn = n === 1 ? 1 : -1;
+      o += lens(P, K, .1, .9, 0, 12, mc("quad", far)) + lens(P, K, .06, .5, inn*5.5, 6, mc("add", far)) + lens(K, A, .08, .62, -inn*1.5, 10, mc("calf", far));
+    } else {
+      o += lens(P, K, .2, .86, -4.4, 10, mc("ham", far)) + lens(P, K, .1, .93, 3.8, 12.5, mc("quad", far)) + lens(K, A, .06, .62, -2.8, 10.5, mc("calf", far)) + lens(K, A, .12, .74, 2.8, 5, far ? "mu2" : "mu");
+    }
+    return o + limb(A, T, 9, 10, 8, .5, far ? "shoe2" : "shoe");
+  };
+  const armSide = (n, far) => {
+    const S0 = pts["S"+n], E = pts["E"+n], W = pts["W"+n];
+    let o = limb(S0, E, 12, 17, 8, .45, sil(far)) + limb(E, W, 10, 12, 6, .35, sil(far));
+    if (front) o += lens(S0, E, .3, .88, 0, 9, mc("bic", far)) + lens(E, W, .04, .72, 0, 8.5, mc("fa", far));
+    else o += lens(S0, E, .12, .84, -3.4, 8.5, mc("tri", far)) + lens(S0, E, .28, .88, 3.2, 8.5, mc("bic", far)) + lens(E, W, .04, .72, .8, 8.5, mc("fa", far));
+    if (pts.X1 && n === 1) o += limb(W, pts.X1, 6, 7, 5, .5, sil(far));
+    o += front ? limb([S0[0] + (n === 1 ? 2 : -2), S0[1]-3], mix(S0, E, .42), 13, 15, 9, .35, mc("delt", far)) : limb(S0, mix(S0, E, .4), 17, 18, 10, .3, mc("delt", far));
+    return o;
+  };
+  let s = legSide(2, true) + armSide(2, true);
+  s += limb(pts.N, pts.H, 10, 10, 9, .5, "sil");
+  const N = pts.N, P = pts.P;
+  if (front){
+    const S1 = pts.S1, S2 = pts.S2, q = (p, d) => f1(p[0]+d[0]) + "," + f1(p[1]+d[1]);
+    s += `<path class="sil" d="M${q(S1,[-8,-3])} L${q(S2,[8,-3])} Q${q(S2,[5,22])} ${q(pts.P2,[3,-4])} L${q(pts.P2,[2,4])} L${q(pts.P1,[-2,4])} L${q(pts.P1,[-3,-4])} Q${q(S1,[-5,22])} ${q(S1,[-8,-3])} Z"/>`;
+    for (const sd of [-1,1]){
+      s += limb([N[0]+sd*15, N[1]+12], [N[0]+sd*12.5, N[1]+33], 1.6, 5.5, 1.6, .5, mc("lat"));
+      s += limb([N[0]+sd*3.5, N[1]-4], [N[0]+sd*13, N[1]+1], 1.6, 5.5, 1.6, .5, mc("trap"));
+      s += limb([N[0]+sd*13, N[1]+24], [P[0]+sd*9.5, P[1]-5], 1.6, 6.5, 1.6, .5, mc("obl"));
+      s += limb([N[0]+sd*14.5, N[1]+8], [N[0]+sd*1.6, N[1]+14], 1.6, 12, 1.6, .42, mc("pec"));
+      if (hitF("glu", PR) || hitF("glu", SE)) s += limb([pts["P"+(sd < 0 ? 1 : 2)][0]+sd*8, P[1]-9], [pts["P"+(sd < 0 ? 1 : 2)][0]+sd*9, P[1]+6], 1.6, 6, 1.6, .5, mc("glu"));
+    }
+    s += limb([N[0], N[1]+21], [P[0], P[1]-4], 3, 14, 5, .45, mc("abs"));
+    const top = N[1]+21, bot = P[1]-4;
+    s += seg([N[0], top+2], [P[0], bot-2]);
+    for (const t of [.25,.45,.66]){ const y = top + (bot-top)*t; s += seg([N[0]-5.5, y], [N[0]+5.5, y]); }
+  } else {
+    const nt = (() => { const dx = N[0]-P[0], dy = N[1]-P[1], l = Math.hypot(dx,dy) || 1; return [-dy/l, dx/l]; })();
+    s += limb(P, N, 18, 31, 26, .66, "sil");
+    s += lens(P, N, .42, .9, -5.2, 12, mc("lat"), nt) + lens(P, N, .03, .42, -6.8, 7, mc("lowb"), nt) + lens(P, N, .84, 1.1, -6.2, 7, mc("trap"), nt);
+    s += lens(P, N, .1, .56, .6, 8, mc("obl"), nt) + lens(P, N, .06, .58, 7, 10, mc("abs"), nt) + lens(P, N, .6, .97, 7, 12.5, mc("pec"), nt);
+    for (const t of [.2,.33,.46]){ const c0 = mix(P, N, t); s += seg([c0[0]+nt[0]*3, c0[1]+nt[1]*3], [c0[0]+nt[0]*11, c0[1]+nt[1]*11]); }
+    s += lens(mix(P, N, .2), mix(P, pts.K1, .42), 0, 1, -6.5, 13.5, mc("glu"));
+  }
+  s += `<circle class="hd" cx="${f1(pts.H[0])}" cy="${f1(pts.H[1])}" r="10.2"/>`;
+  s += legSide(1, false) + armSide(1, false);
+  return s;
+}
+
 /* scène illustrée : position finale en fantôme, flèche, puis position courante */
 function sceneInner(famId, ex, u){
   const fam = FAM[famId]; if (!fam) return "";
@@ -890,9 +966,9 @@ function sceneInner(famId, ex, u){
   let s = `<line class="fig-floor" x1="0" y1="184" x2="200" y2="184"/>` + propsSvg(fam.props, cur);
   if (fam.k.length > 1){
     const a = famPts(fam, 0), b = famPts(fam, 1);
-    s += `<g class="ghost">${bodySvg(fam, ex, b, true)}${equipSvg(fam, ex, b)}</g>` + arrowSvg(fam, a, b);
+    s += `<g class="ghost">${bodyIl(fam, ex, b)}${equipSvg(fam, ex, b)}</g>` + arrowSvg(fam, a, b);
   }
-  return s + bodySvg(fam, ex, cur, true) + equipSvg(fam, ex, cur);
+  return s + bodyIl(fam, ex, cur) + equipSvg(fam, ex, cur);
 }
 function figSvg(famId, ex, u = 0){ return `<svg class="il" viewBox="0 -14 200 206" role="img" aria-label="Illustration du mouvement">${sceneInner(famId, ex, u)}</svg>`; }
 const REDUCE = (() => { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch(e){ return false; } })();
@@ -977,8 +1053,8 @@ function thumbHtml(e){
 
 
 /* ================= estimation visuelle du % de gras ================= */
-const BF_M = [[8,"Très sec : abdos et veines bien visibles"],[12,"Sec : abdos visibles"],[15,"Athlétique : contour des abdos"],[20,"En forme : muscles visibles, pas d'abdos"],[25,"Ventre doux, peu de définition"],[30,"Ventre arrondi"],[35,"Ventre proéminent"],[40,"Tour de taille important"]];
-const BF_F = [[15,"Très sèche : abdos visibles"],[20,"Athlétique : ventre plat, muscles dessinés"],[25,"En forme : silhouette tonique et douce"],[30,"Courbes plus marquées"],[35,"Ventre et hanches arrondis"],[40,"Tour de taille important"],[45,"Tour de taille très important"]];
+const BF_M = [[7,"5–9 %","Très sec, abdos et veines visibles"],[12,"10–14 %","Sec, abdos visibles"],[17,"15–19 %","Athlétique, contour des abdos"],[22,"20–24 %","Muscles visibles, ventre plat"],[27,"25–29 %","Ventre doux"],[32,"30–34 %","Ventre arrondi"],[37,"35–39 %","Ventre proéminent"],[42,"40 % et +","Tour de taille important"]];
+const BF_F = [[12,"10–14 %","Très sèche, abdos visibles"],[17,"15–19 %","Athlétique, abdos dessinés"],[22,"20–24 %","Tonique, ventre plat"],[27,"25–29 %","Silhouette douce"],[32,"30–34 %","Courbes plus marquées"],[37,"35–39 %","Ventre et hanches arrondis"],[42,"40–44 %","Tour de taille important"],[47,"45 % et +","Tour de taille très important"]];
 function smoothClosed(pts){
   const n = pts.length; let d = `M${f1(pts[0][0])},${f1(pts[0][1])}`;
   for (let i=0;i<n;i++){ const p0 = pts[(i-1+n)%n], p1 = pts[i], p2 = pts[(i+1)%n], p3 = pts[(i+2)%n];
@@ -991,7 +1067,7 @@ function bfFig(sex, bf){
   const waist = F ? 10.5 + k*.30 : 12.8 + k*.36;
   const hip = F ? 17.5 + bf*.11 : 15.2 + bf*.07;
   const chest = (F ? 14.5 : 17.5) + bf*.05;
-  const sh = F ? 19.5 : 23.5, armOut = Math.max(0, bf - 18)*.14, aw = (F ? 3.6 : 4.6) + bf*.045;
+  const sh = (F ? 19.5 : 23.5) + Math.max(0, 15 - bf)*.12, armOut = Math.max(0, bf - 18)*.14, aw = (F ? 3.6 : 4.6) + bf*.045;
   const thighO = (F ? 17 : 15.6) + bf*.1 + (F ? bf*.03 : 0), thighI = cl((F ? 2.6 : 3.4) - bf*.05, .6, 4), knee = (F ? 11.5 : 12.6) + bf*.03;
   const calf = (F ? 12 : 13.2) + bf*.03;
   const ax = Math.max(sh + armOut, Math.max(chest + 1, waist + belly*.15) + aw + 1.6); // bord externe du bras, toujours détaché du tronc
@@ -1007,7 +1083,7 @@ function bfFig(sex, bf){
   if (F) s += `<path class="bfh" d="M${c-9.5},16 Q${c-11},2 ${c},2 Q${c+11},2 ${c+9.5},16 Q${c+11},26 ${c+7},30 L${c-7},30 Q${c-11},26 ${c-9.5},16Z"/>`;
   s += `<path class="bfb" d="${smoothClosed(pts)}"/>`;
   s += `<ellipse class="bfb" cx="${c}" cy="13.5" rx="${F ? 7 : 7.4}" ry="9.4"/>`;
-  if (F) s += `<path class="bfh" d="M${c-7.6},12 Q${c-6},3.5 ${c},4 Q${c+6},3.5 ${c+7.6},12 Q${c+3},7.5 ${c},8.4 Q${c-3},7.5 ${c-7.6},12Z"/>`;
+  s += `<path class="bfh" d="M${c-7.6},12 Q${c-6},3.5 ${c},4 Q${c+6},3.5 ${c+7.6},12 Q${c+3},7.5 ${c},8.4 Q${c-3},7.5 ${c-7.6},12Z"/>`;
   // ombres de volume
   s += `<path class="bfs" opacity=".55" d="M${c+waist-2},62 Q${c+waist+.5},76 ${c+hip-1.5},90 L${c+hip-4},90 Q${c+waist-2.5},76 ${c+waist-4},62Z"/>`;
   s += `<path class="bfs" opacity=".45" d="M${c+ax-1},40 Q${c+ax+.8},55 ${c+ax+.5},68 L${c+ax-1.6},68 Q${c+ax-1.4},55 ${c+ax-2.6},41Z"/>`;
@@ -1026,6 +1102,9 @@ function bfFig(sex, bf){
     s += `<path class="bfl" d="M${c-thighO+4},104 Q${c-8},112 ${c-thighI-4},122 M${c+thighO-4},104 Q${c+8},112 ${c+thighI+4},122"/></g>`;
   }
   s += `<circle class="bfs2" cx="${c}" cy="${76 + belly*.3}" r="${(.8 + belly*.04).toFixed(2)}"/>`;
+  const hx = hip - .2 + belly*.3, tx = thighO - (thighO - knee - 1)*.4 + .4;
+  s += `<path class="bfc" d="M${c-hx},${86+belly*.15} Q${c},${88+belly*.4} ${c+hx},${86+belly*.15} L${c+tx},113 L${c+thighI+.3},113 L${c},100 L${c-thighI-.3},113 L${c-tx},113 Z"/>`;
+  if (F){ const b = 4.6 + bf*.06; s += `<path class="bfc" d="M${c-chest+.2},${45} Q${c-7},${54+b*.6} ${c},${49+b*.35} Q${c+7},${54+b*.6} ${c+chest-.2},${45} L${c+chest-1.4},${42} Q${c},${46} ${c-chest+1.4},${42} Z M${c-8},43 L${c-10.5},30 L${c-9},30 L${c-6.5},43 Z M${c+8},43 L${c+10.5},30 L${c+9},30 L${c+6.5},43 Z"/>`; }
   if (fOp > 0) s += `<path class="bfl" opacity="${fOp.toFixed(2)}" d="M${c-waist-belly*.4+3},${83+belly*.25} Q${c},${90+belly*.45} ${c+waist+belly*.4-3},${83+belly*.25}"/>`;
   return `<svg viewBox="8 -2 84 174" aria-hidden="true">${s}</svg>`;
 }
@@ -1034,13 +1113,13 @@ function bfSheet(){
   const body = () => `<h2>Estimer mon % de gras</h2>
     <p class="small muted">Choisis la silhouette qui te ressemble le plus. C'est une estimation visuelle : compte quelques points de marge d'erreur.</p>
     <div class="seg" id="bf-sex"><button data-v="M" aria-pressed="${sex==="M"}">Homme</button><button data-v="F" aria-pressed="${sex==="F"}">Femme</button></div>
-    <div class="bfgrid">${(sex === "F" ? BF_F : BF_M).map(([v,t]) => `<button class="bftile" data-bf="${v}" aria-pressed="${String(+S.profile.bf === v)}">${bfFig(sex, v)}<b>≈ ${v} %</b><span>${t}</span></button>`).join("")}</div>
+    <div class="bfgrid">${(sex === "F" ? BF_F : BF_M).map(([v,r,t]) => `<button class="bftile ${sex === "F" ? "f" : "m"}" data-bf="${v}" aria-pressed="${String(+S.profile.bf === v)}"><span class="pane">${bfFig(sex, v)}</span><b>${r}</b><span>${t}</span></button>`).join("")}</div>
     <button class="btn" data-act="close">Annuler</button>`;
   openSheet(`<div id="bf-body" class="stack">${body()}</div>`, sh => {
     sh.addEventListener("click", ev => {
       const sb = ev.target.closest("#bf-sex button"); if (sb){ sex = sb.dataset.v; sh.querySelector("#bf-body").innerHTML = body(); return; }
       const t = ev.target.closest("[data-bf]"); if (!t) return;
-      S.profile.bf = t.dataset.bf; S.profile.sex = sex; save(); closeSheet(); render(); toast(`% de gras estimé à ${t.dataset.bf} %`);
+      S.profile.bf = t.dataset.bf; S.profile.sex = sex; save(); closeSheet(); render(); toast(`% de gras estimé à environ ${t.dataset.bf} %`);
     });
   });
 }

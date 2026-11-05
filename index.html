@@ -253,6 +253,7 @@ details.info p{margin-top:8px;font-size:14px;color:var(--muted)}
 ol.steps{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px}
 ol.steps li::marker{color:var(--accent);font-weight:800}
 .toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.5);max-width:90vw;text-align:center}
+.calgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.calcell{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}.calcell .big{font-size:clamp(28px,8vw,40px)}
 .big{font-size:44px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
 .kv{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
 .kv:first-child{border-top:0}
@@ -942,7 +943,7 @@ function vHome(){
     <button class="tile" data-act="go" data-tab="programmes"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="2"/><path class="a" d="M8 11h8M8 15h5"/><path d="M8 2v4M16 2v4"/></svg><b>Programmes</b><span>Créer, générer et choisir le programme actif</span></button>
     <button class="tile" data-act="go" data-tab="exercices"><svg viewBox="0 0 24 24"><path class="a" d="M2 12h20"/><rect x="4" y="7" width="3" height="10" rx="1"/><rect x="17" y="7" width="3" height="10" rx="1"/></svg><b>Exercices</b><span>${EX_LIST.length} exercices : musculation, mobilité, tendons</span></button>
     <button class="tile" data-act="go" data-tab="stats"><svg viewBox="0 0 24 24"><path d="M4 20h16"/><path class="a" d="M6 16l4-5 3 3 5-7"/></svg><b>Journal et stats</b><span>Historique et courbes de progression</span></button>
-    <button class="tile" data-act="go" data-tab="profil"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path class="a" d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><b>Profil et calories</b><span>Mesures, pesées et calories de maintien</span></button>
+    <button class="tile" data-act="go" data-tab="profil"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path class="a" d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><b>Profil et calories</b><span>Mesures, pesées, BMR et calories de maintien</span></button>
   </nav>`;
 }
 
@@ -1265,7 +1266,7 @@ function vProfile(){
     <button class="btn" data-act="logWeight">Enregistrer la pesée d'aujourd'hui</button>
   </section>
   <section class="card">
-    <h2>Calories de maintien</h2>
+    <h2>BMR et calories de maintien</h2>
     <div class="field"><label for="p-act">Niveau d'activité</label><select id="p-act" data-p="act">${ACT.map(a => `<option value="${a[0]}" ${+P.act===a[0]?"selected":""}>${a[1]} – ${a[2]}</option>`).join("")}</select></div>
     <div id="calBox">${calBox(calories())}</div>
   </section>
@@ -1290,17 +1291,20 @@ function vProfile(){
   </section>`;
 }
 function calBox(c){
-  if (!c) return `<div class="empty">Entre ton âge, ton poids et ta grandeur pour obtenir l'estimation.</div>`;
-  const main = c.maintK ?? c.maint;
+  if (!c) return `<div class="empty">Entre ton âge, ton poids et ta grandeur pour obtenir ton BMR et tes calories de maintien.</div>`;
+  const bmr = c.katch ?? c.mif, main = c.maintK ?? c.maint;
   return `<div class="stack">
-    <div><span class="pill">Maintien estimé</span></div>
-    <div class="row" style="align-items:baseline;gap:8px"><span class="big">${Math.round(main).toLocaleString("fr-CA")}</span><span class="muted">kcal / jour</span></div>
-    <div class="list">
-      <div class="kv"><span>Métabolisme de base (Mifflin-St Jeor)</span><span class="num">${Math.round(c.mif)}</span></div>
-      <div class="kv"><span>Maintien selon Mifflin-St Jeor</span><span class="num">${Math.round(c.maint)}</span></div>
-      ${c.katch ? `<div class="kv"><span>Masse maigre</span><span class="num">${fmtW(c.lbm*LBKG)} ${wU()}</span></div><div class="kv"><span>Métabolisme de base (Katch-McArdle)</span><span class="num">${Math.round(c.katch)}</span></div><div class="kv"><span>Maintien selon Katch-McArdle</span><span class="num">${Math.round(c.maintK)}</span></div>` : ""}
+    <div class="calgrid">
+      <div class="calcell"><span class="pill">BMR</span><span class="big">${Math.round(bmr).toLocaleString("fr-CA")}</span><span class="small muted">kcal / jour au repos complet</span></div>
+      <div class="calcell"><span class="pill">Maintien</span><span class="big">${Math.round(main).toLocaleString("fr-CA")}</span><span class="small muted">kcal / jour avec ton activité</span></div>
     </div>
-    <p class="small muted">${c.katch ? "Le chiffre principal utilise Katch-McArdle, plus précis quand le % de gras est connu. " : ""}C'est une estimation : si ton poids bouge sur 2 ou 3 semaines à cet apport, ajuste de 100 à 200 kcal.</p>
+    <p class="small muted">Le BMR (métabolisme de base) est l'énergie que ton corps brûle juste pour fonctionner. Le maintien, c'est le BMR multiplié par ton niveau d'activité.</p>
+    <div class="list">
+      <div class="kv"><span>BMR selon Mifflin-St Jeor</span><span class="num">${Math.round(c.mif)}</span></div>
+      <div class="kv"><span>Maintien selon Mifflin-St Jeor</span><span class="num">${Math.round(c.maint)}</span></div>
+      ${c.katch ? `<div class="kv"><span>Masse maigre</span><span class="num">${fmtW(c.lbm*LBKG)} ${wU()}</span></div><div class="kv"><span>BMR selon Katch-McArdle</span><span class="num">${Math.round(c.katch)}</span></div><div class="kv"><span>Maintien selon Katch-McArdle</span><span class="num">${Math.round(c.maintK)}</span></div>` : ""}
+    </div>
+    <p class="small muted">${c.katch ? "Les chiffres principaux utilisent Katch-McArdle, plus précis quand le % de gras est connu. " : "Ajoute ton % de gras pour un calcul plus précis (Katch-McArdle). "}C'est une estimation : si ton poids bouge sur 2 ou 3 semaines à cet apport, ajuste de 100 à 200 kcal.</p>
   </div>`;
 }
 

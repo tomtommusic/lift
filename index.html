@@ -1485,7 +1485,7 @@ function vLibrary(){
   <div class="row between"><h1>Exercices</h1><button class="btn sm primary" data-act="newEx">+ Créer un exercice</button></div>
   <div class="chips">${CATS.map(([k,l]) => `<button class="chip" data-act="fCat" data-v="${k}" aria-pressed="${S.ui.cat===k}">${l}</button>`).join("")}</div>
   <div class="field"><label for="lib-q">Rechercher</label><input id="lib-q" type="search" data-lib="q" value="${esc(S.ui.q)}" placeholder="ex. curl, squat, poulie…"></div>
-  <details class="info"${S.ui.muscle || S.ui.equip ? " open" : ""}><summary>Filtres${S.ui.muscle || S.ui.equip ? " (actifs)" : ""}</summary>
+  <details class="info"${S.pick || S.ui.muscle || S.ui.equip ? " open" : ""}><summary>Filtres${S.ui.muscle || S.ui.equip ? " (actifs)" : ""}</summary>
     <div class="stack" style="margin-top:10px">
       <span class="lbl">Groupe musculaire</span>
       <div class="chips wrapchips">${[["","Tous"],...GROUPS].map(([k,l]) => `<button class="chip" data-act="fMuscle" data-v="${k}" aria-pressed="${S.ui.muscle===k}">${l}</button>`).join("")}</div>

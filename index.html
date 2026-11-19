@@ -204,22 +204,24 @@ p{margin:0}
 .il .eqf{fill:#33373D}
 .il .eql{stroke:#33373D}
 .il .eqband{stroke:#1E88FF}
-.il .sil{fill:#E6AC83}
-.il .sil2{fill:#BF7E55}
-.il .mu{fill:#EDB68E;stroke:#B9724A;stroke-width:.55}
-.il .mu2{fill:#C98A61;stroke:#93542F;stroke-width:.5}
+.il .sil{fill:#F2AE7B}
+.il .sil2{fill:#C98450}
+.il .mu{fill:#F7B886;stroke:#B8703C;stroke-width:.55}
+.il .mu2{fill:#CF8A55;stroke:#94532A;stroke-width:.5}
 .il .mu.fx{fill:#2E8FFF;stroke:#0F5FC4;stroke-width:.55}
 .il .mu2.fx{fill:#1667C8;stroke:#0B4A93}
 .il .mu.fs{fill:#8EC5FF;stroke:#4E93DA}
 .il .mu2.fs{fill:#6FA6E0;stroke:#3F79B8}
 .il .mul{stroke:#A9663F;stroke-width:1;fill:none;stroke-linecap:round;opacity:.85}
 .il .mu.fx + .mul,.il .fx ~ .mul{stroke:#0B5BC0}
-.il .hd{fill:#E6AC83}
-.il .hair{fill:#3A2A20}
-.il .shorts{fill:#1C1E22}
-.il .shorts2{fill:#121315}
-.il .shoe{fill:#2E3136}
-.il .shoe2{fill:#1E2024}
+.il .hd{fill:#F2AE7B}
+.il .hair{fill:#5A3418}
+.il .shorts{fill:#222935}
+.il .stripe{fill:none;stroke:#1E88FF;stroke-width:2.2;stroke-linecap:round}
+.il .sole{fill:none;stroke:#FFFFFF;stroke-width:1.8;stroke-linecap:round}
+.il .shorts2{fill:#181D26}
+.il .shoe{fill:#1E2228}
+.il .shoe2{fill:#15181C}
 .il .arw{fill:none;stroke:#1E88FF;stroke-width:4;stroke-linecap:round}
 .il .arwh{fill:#1E88FF}
 .fb{fill:var(--fig)}
@@ -382,7 +384,7 @@ ol.steps li::marker{color:var(--accent);font-weight:800}
   <defs>
     <filter id="bodyfx" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
       <feMorphology in="SourceAlpha" operator="dilate" radius="1.15" result="dil"></feMorphology>
-      <feFlood flood-color="#6B3519" result="olc"></feFlood>
+      <feFlood flood-color="#5A2408" result="olc"></feFlood>
       <feComposite in="olc" in2="dil" operator="in" result="outline"></feComposite>
       <feGaussianBlur in="SourceAlpha" stdDeviation="2.6" result="blur"></feGaussianBlur>
       <feComposite in="SourceAlpha" in2="blur" operator="arithmetic" k2="1" k3="-1" result="edge"></feComposite>
@@ -1095,7 +1097,10 @@ function bodyIl(fam, ex, pts){
     } else {
       o += lens(P, K, .2, .86, -4.4, 10, mc("ham", far)) + lens(P, K, .1, .93, 3.8, 12.5, mc("quad", far)) + lens(K, A, .06, .62, -2.8, 10.5, mc("calf", far)) + lens(K, A, .12, .74, 2.8, 5, far ? "mu2" : "mu");
     }
-    return o + limb(A, T, 9, 10, 8, .5, far ? "shoe2" : "shoe");
+    o += limb(A, T, 9, 10, 8, .5, far ? "shoe2" : "shoe");
+    { const dx = T[0]-A[0], dy = T[1]-A[1], l = Math.hypot(dx,dy) || 1; let nx = -dy/l, ny = dx/l; if (ny < 0){ nx = -nx; ny = -ny; }
+      o += `<path class="sole" d="M${f1(A[0]+nx*4.2-dx/l*3)},${f1(A[1]+ny*4.2-dy/l*3)} L${f1(T[0]+nx*3.6+dx/l*3)},${f1(T[1]+ny*3.6+dy/l*3)}"/>`; }
+    return o;
   };
   const armSide = (n, far) => {
     const S0 = pts["S"+n], E = pts["E"+n], W = pts["W"+n];
@@ -1111,7 +1116,7 @@ function bodyIl(fam, ex, pts){
     const N0 = pts.N, P0 = pts.P, K = pts["K"+n], Pn = pts["P"+n];
     const tn = nrm(P0, N0), ln_ = nrm(K, Pn), w = mix(P0, N0, .13), m = mix(Pn, K, .46), h = mix(Pn, K, .08);
     const pt = (b, n2, k) => f1(b[0]+n2[0]*k) + "," + f1(b[1]+n2[1]*k);
-    return `<path class="${cls}" d="M${pt(w,tn,-10.5)} L${pt(w,tn,10.5)} Q${pt(h,ln_,13)} ${pt(m,ln_,10.5)} L${pt(m,ln_,-10.5)} Q${pt(h,ln_,-12)} ${pt(w,tn,-10.5)} Z"/>`;
+    return `<path class="${cls}" d="M${pt(w,tn,-10.5)} L${pt(w,tn,10.5)} Q${pt(h,ln_,13)} ${pt(m,ln_,10.5)} L${pt(m,ln_,-10.5)} Q${pt(h,ln_,-12)} ${pt(w,tn,-10.5)} Z"/>` + (cls === "shorts" ? `<path class="stripe" d="M${pt(w,tn,0)} Q${pt(h,ln_,.5)} ${pt(m,ln_,0)}"/>` : "");
   };
   let s = legSide(2, true) + (front ? "" : shortsSide(2, "shorts2") + armSide(2, true));
   s += limb(pts.N, pts.H, 10, 10, 9, .5, "sil");
@@ -1146,6 +1151,7 @@ function bodyIl(fam, ex, pts){
     const P1 = pts.P1, P2 = pts.P2, K1 = pts.K1, K2 = pts.K2, q = (p, d) => f1(p[0]+d[0]) + "," + f1(p[1]+d[1]);
     const m1 = mix(P1, K1, .42), m2 = mix(P2, K2, .42);
     s += `<path class="shorts" d="M${q(P1,[-11,-6])} L${q(P2,[11,-6])} L${q(m2,[10,0])} L${q(m2,[-6,0])} L${q(P,[0,6])} L${q(m1,[6,0])} L${q(m1,[-10,0])} Z"/>`;
+    s += `<path class="stripe" d="M${q(P1,[-10,-4])} L${q(m1,[-9,-1])} M${q(P2,[10,-4])} L${q(m2,[9,-1])}"/>`;
   } else {
     s += shortsSide(1, "shorts");
     if (hitF("glu", PR) || hitF("glu", SE)) s += lens(mix(P, N, .14), mix(P, pts.K1, .38), 0, 1, -6, 12, mc("glu"));

@@ -203,19 +203,20 @@ p{margin:0}
 .il .eqf{fill:#33373D}
 .il .eql{stroke:#33373D}
 .il .eqband{stroke:#1E88FF}
-.il .sil{fill:#E2A77F;stroke:#A9663F;stroke-width:1}
-.il .sil2{fill:#C4855C;stroke:#97582F;stroke-width:1}
-.il .mu{fill:#EDB48C;stroke:#B26E48;stroke-width:.8}
-.il .mu2{fill:#CF9068;stroke:#9C5C37;stroke-width:.7}
-.il .mu.fx{fill:#1E88FF;stroke:#0B5BC0}
+.il .sil{fill:#E6AC83}
+.il .sil2{fill:#BF7E55}
+.il .mu{fill:#EDB68E;stroke:#B9724A;stroke-width:.55}
+.il .mu2{fill:#C98A61;stroke:#93542F;stroke-width:.5}
+.il .mu.fx{fill:#2E8FFF;stroke:#0F5FC4;stroke-width:.55}
 .il .mu2.fx{fill:#1667C8;stroke:#0B4A93}
 .il .mu.fs{fill:#8EC5FF;stroke:#4E93DA}
 .il .mu2.fs{fill:#6FA6E0;stroke:#3F79B8}
 .il .mul{stroke:#A9663F;stroke-width:1;fill:none;stroke-linecap:round;opacity:.85}
 .il .mu.fx + .mul,.il .fx ~ .mul{stroke:#0B5BC0}
-.il .hd{fill:#E2A77F;stroke:#A9663F;stroke-width:1}
+.il .hd{fill:#E6AC83}
 .il .hair{fill:#3A2A20}
-.il .shorts{fill:#202328;stroke:#0E1013;stroke-width:.8}
+.il .shorts{fill:#1C1E22}
+.il .shorts2{fill:#121315}
 .il .shoe{fill:#2E3136}
 .il .shoe2{fill:#1E2024}
 .il .arw{fill:none;stroke:#1E88FF;stroke-width:4;stroke-linecap:round}
@@ -378,6 +379,20 @@ ol.steps li::marker{color:var(--accent);font-weight:800}
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
+    <filter id="bodyfx" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+      <feMorphology in="SourceAlpha" operator="dilate" radius="1.15" result="dil"></feMorphology>
+      <feFlood flood-color="#6B3519" result="olc"></feFlood>
+      <feComposite in="olc" in2="dil" operator="in" result="outline"></feComposite>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2.6" result="blur"></feGaussianBlur>
+      <feComposite in="SourceAlpha" in2="blur" operator="arithmetic" k2="1" k3="-1" result="edge"></feComposite>
+      <feFlood flood-color="#4A1E08" flood-opacity=".55" result="shc"></feFlood>
+      <feComposite in="shc" in2="edge" operator="in" result="shade"></feComposite>
+      <feOffset in="blur" dx="-2.2" dy="-2.6" result="hoff"></feOffset>
+      <feComposite in="SourceAlpha" in2="hoff" operator="arithmetic" k2="1" k3="-1" result="hedge"></feComposite>
+      <feFlood flood-color="#FFF1E4" flood-opacity=".5" result="hlc"></feFlood>
+      <feComposite in="hlc" in2="hedge" operator="in" result="hilite"></feComposite>
+      <feMerge><feMergeNode in="outline"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode><feMergeNode in="shade"></feMergeNode><feMergeNode in="hilite"></feMergeNode></feMerge>
+    </filter>
     <pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
       <rect width="5" height="5" class="h-bg"></rect>
       <line x1="1" y1="0" x2="1" y2="5" class="h-ln"></line>
@@ -1070,10 +1085,17 @@ function bodyIl(fam, ex, pts){
     if (front) o += lens(S0, E, .3, .88, 0, 9, mc("bic", far)) + lens(E, W, .04, .72, 0, 8.5, mc("fa", far));
     else o += lens(S0, E, .12, .84, -3.4, 8.5, mc("tri", far)) + lens(S0, E, .28, .88, 3.2, 8.5, mc("bic", far)) + lens(E, W, .04, .72, .8, 8.5, mc("fa", far));
     if (pts.X1 && n === 1) o += limb(W, pts.X1, 6, 7, 5, .5, sil(far));
+    { const dx = W[0]-E[0], dy = W[1]-E[1], l = Math.hypot(dx,dy) || 1; o += `<ellipse class="${sil(far)}" cx="${f1(W[0]+dx/l*2.5)}" cy="${f1(W[1]+dy/l*2.5)}" rx="5.2" ry="5.2"/>`; }
     o += front ? limb([S0[0] + (n === 1 ? 1 : -1), S0[1]-2], mix(S0, E, .3), 11, 12, 8, .4, mc("delt", far)) : (Math.hypot(E[0]-S0[0], E[1]-S0[1]) < 14 ? `<circle class="${mc("delt", far)}" cx="${f1(S0[0])}" cy="${f1(S0[1])}" r="8.5"/>` : limb(S0, mix(S0, E, .4), 17, 18, 10, .3, mc("delt", far)));
     return o;
   };
-  let s = legSide(2, true) + (front ? "" : armSide(2, true));
+  const shortsSide = (n, cls) => {
+    const N0 = pts.N, P0 = pts.P, K = pts["K"+n], Pn = pts["P"+n];
+    const tn = nrm(P0, N0), ln_ = nrm(K, Pn), w = mix(P0, N0, .13), m = mix(Pn, K, .46), h = mix(Pn, K, .08);
+    const pt = (b, n2, k) => f1(b[0]+n2[0]*k) + "," + f1(b[1]+n2[1]*k);
+    return `<path class="${cls}" d="M${pt(w,tn,-10.5)} L${pt(w,tn,10.5)} Q${pt(h,ln_,13)} ${pt(m,ln_,10.5)} L${pt(m,ln_,-10.5)} Q${pt(h,ln_,-12)} ${pt(w,tn,-10.5)} Z"/>`;
+  };
+  let s = legSide(2, true) + (front ? "" : shortsSide(2, "shorts2") + armSide(2, true));
   s += limb(pts.N, pts.H, 10, 10, 9, .5, "sil");
   const N = pts.N, P = pts.P;
   if (front){
@@ -1107,7 +1129,7 @@ function bodyIl(fam, ex, pts){
     const m1 = mix(P1, K1, .42), m2 = mix(P2, K2, .42);
     s += `<path class="shorts" d="M${q(P1,[-11,-6])} L${q(P2,[11,-6])} L${q(m2,[10,0])} L${q(m2,[-6,0])} L${q(P,[0,6])} L${q(m1,[6,0])} L${q(m1,[-10,0])} Z"/>`;
   } else {
-    s += limb(mix(P, N, .06), mix(pts.P1, pts.K1, .4), 20, 21, 18, .45, "shorts");
+    s += shortsSide(1, "shorts");
     if (hitF("glu", PR) || hitF("glu", SE)) s += lens(mix(P, N, .14), mix(P, pts.K1, .38), 0, 1, -6, 12, mc("glu"));
   }
   s += armSide(1, false) + (front ? armSide(2, false) : "");
@@ -1121,9 +1143,9 @@ function sceneInner(famId, ex, u){
   let s = `<line class="fig-floor" x1="0" y1="184" x2="200" y2="184"/>` + propsSvg(fam.props, cur);
   if (fam.k.length > 1){
     const a = famPts(fam, 0), b = famPts(fam, 1);
-    return s + bodyIl(fam, ex, cur) + equipSvg(fam, ex, cur) + arrowSvg(fam, a, b, ex);
+    return s + `<g filter="url(#bodyfx)">${bodyIl(fam, ex, cur)}</g>` + equipSvg(fam, ex, cur) + arrowSvg(fam, a, b, ex);
   }
-  return s + bodyIl(fam, ex, cur) + equipSvg(fam, ex, cur);
+  return s + `<g filter="url(#bodyfx)">${bodyIl(fam, ex, cur)}</g>` + equipSvg(fam, ex, cur);
 }
 function figSvg(famId, ex, u = 0){ return `<svg class="il" viewBox="0 -14 200 206" role="img" aria-label="Illustration du mouvement">${sceneInner(famId, ex, u)}</svg>`; }
 const REDUCE = (() => { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch(e){ return false; } })();

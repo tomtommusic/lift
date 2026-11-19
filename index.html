@@ -146,6 +146,17 @@ p{margin:0}
 .savebar .state.dirty{color:var(--ink)}
 .savebar .state.dirty::before{content:"● ";color:var(--accent)}
 
+.exgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (min-width:560px){.exgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.excard{appearance:none;text-align:center;cursor:pointer;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:0 0 12px;display:flex;flex-direction:column;align-items:center;gap:4px;overflow:hidden;min-width:0}
+.excard:active{transform:scale(.985)}
+.exart{display:block;width:100%;aspect-ratio:1/1;background:radial-gradient(90% 80% at 50% 35%,#F4F6F9,#DDE2E8);overflow:hidden;margin-bottom:6px}
+.exart svg{display:block;width:100%;height:100%}
+.exart img{width:100%;height:100%;object-fit:cover}
+.exname{font-family:var(--f-display);font-weight:800;font-size:17px;line-height:1.05;text-transform:uppercase;letter-spacing:.02em;padding-inline:8px;text-wrap:balance}
+.exdose{font-size:13px;font-weight:700;color:var(--accent);padding-inline:8px;font-variant-numeric:tabular-nums}
+.exmus{font-size:12px;color:var(--muted);padding-inline:8px;line-height:1.25}
+.exadd{margin-top:6px}
 .exitem{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px 8px 8px;cursor:pointer;text-align:left;width:100%;appearance:none;color:var(--ink)}
 .thumb{flex:0 0 auto;width:76px;height:76px;border-radius:12px;background:var(--surface2);overflow:hidden;display:grid;place-items:center}
 .thumb svg{width:76px;height:78px}
@@ -178,36 +189,37 @@ p{margin:0}
 .bfc{fill:#30343B;stroke:#1E2126;stroke-width:.5}
 .bfn{fill:#B47E5C}
 .fh{fill:var(--fig)}
-.thumb.il-bg,.figbox{background:#EEF1F5}
-.il .fig-floor{stroke:#D3D8DF;stroke-width:2}
-.il .fp{fill:#A3A9B1;stroke:#A3A9B1}
-.il .fb{fill:#E2E5EA;stroke:#FFFFFF;stroke-width:1}
-.il .fb2{fill:#CBD0D7;stroke:#FFFFFF;stroke-width:1}
-.il .fh{fill:#D4D8DE;stroke:#FFFFFF;stroke-width:1}
-.il .fb.fx,.il .fb2.fx,.il .fxf{fill:#1F86EE}
-.il .fb.fs,.il .fb2.fs{fill:#A9D0F8}
-.il .fsh{fill:#9EA4AC;stroke:#FFFFFF;stroke-width:1}
-.il .fsh2{fill:#8D939B;stroke:#FFFFFF;stroke-width:1}
-.il .eqp{fill:#9AA0A8;stroke:#7B8189;stroke-width:3}
-.il .eqf{fill:#7B8189}
-.il .eql{stroke:#7B8189}
-.il .eqband{stroke:#1F86EE}
-.il .sil{fill:#D9DDE3}
-.il .sil2{fill:#C2C8D0}
-.il .mu{fill:#E7EAEE;stroke:#F7F8FA;stroke-width:.7}
-.il .mu2{fill:#CDD2D9;stroke:#DCE0E5;stroke-width:.6}
-.il .ghost .mu,.il .ghost .mu2,.il .ghost .mul{display:none}
-.il .mu.fx,.il .mu2.fx{fill:#1F86EE}
-.il .mu2.fx{fill:#1A6CC2}
-.il .mu.fs{fill:#A9D0F8}
-.il .mu2.fs{fill:#8EBCEA}
-.il .mul{stroke:#FFFFFF;stroke-width:1;fill:none;stroke-linecap:round;opacity:.9}
-.il .hd{fill:#D9DDE3;stroke:#FFFFFF;stroke-width:1}
-.il .shoe{fill:#7E848C}
-.il .shoe2{fill:#6C7279}
-.il .ghost{opacity:.28}
-.il .arw{fill:none;stroke:#1F86EE;stroke-width:2.6;stroke-linecap:round}
-.il .arwh{fill:#1F86EE}
+.thumb.il-bg,.figbox{background:radial-gradient(90% 80% at 50% 35%,#F4F6F9,#DDE2E8)}
+.il .fig-floor{stroke:#C4CAD2;stroke-width:2}
+.il .fp{fill:#4A4F57;stroke:#4A4F57}
+.il .fb{fill:#E2A77F;stroke:#B97450;stroke-width:.8}
+.il .fb2{fill:#C88A62;stroke:#A0603E;stroke-width:.8}
+.il .fh{fill:#E2A77F;stroke:#B97450;stroke-width:.8}
+.il .fb.fx,.il .fb2.fx,.il .fxf{fill:#1E88FF}
+.il .fb.fs,.il .fb2.fs{fill:#8EC5FF}
+.il .fsh{fill:#22252A;stroke:#111316;stroke-width:.8}
+.il .fsh2{fill:#16181C;stroke:#0B0C0E;stroke-width:.8}
+.il .eqp{fill:#3B3F46;stroke:#24272C;stroke-width:3}
+.il .eqf{fill:#33373D}
+.il .eql{stroke:#33373D}
+.il .eqband{stroke:#1E88FF}
+.il .sil{fill:#E2A77F;stroke:#A9663F;stroke-width:1}
+.il .sil2{fill:#C4855C;stroke:#97582F;stroke-width:1}
+.il .mu{fill:#EDB48C;stroke:#B26E48;stroke-width:.8}
+.il .mu2{fill:#CF9068;stroke:#9C5C37;stroke-width:.7}
+.il .mu.fx{fill:#1E88FF;stroke:#0B5BC0}
+.il .mu2.fx{fill:#1667C8;stroke:#0B4A93}
+.il .mu.fs{fill:#8EC5FF;stroke:#4E93DA}
+.il .mu2.fs{fill:#6FA6E0;stroke:#3F79B8}
+.il .mul{stroke:#A9663F;stroke-width:1;fill:none;stroke-linecap:round;opacity:.85}
+.il .mu.fx + .mul,.il .fx ~ .mul{stroke:#0B5BC0}
+.il .hd{fill:#E2A77F;stroke:#A9663F;stroke-width:1}
+.il .hair{fill:#3A2A20}
+.il .shorts{fill:#202328;stroke:#0E1013;stroke-width:.8}
+.il .shoe{fill:#2E3136}
+.il .shoe2{fill:#1E2024}
+.il .arw{fill:none;stroke:#1E88FF;stroke-width:4;stroke-linecap:round}
+.il .arwh{fill:#1E88FF}
 .fb{fill:var(--fig)}
 .fb2{fill:var(--fig2)}
 .fb.fx{fill:var(--accent)}
@@ -243,7 +255,7 @@ p{margin:0}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend svg{width:16px;height:16px}
-.legend .lg2{fill:#A9D0F8}
+.legend .lg2{fill:#8EC5FF}
 .note{font-size:13px;color:var(--muted);border-left:3px solid var(--accent);padding-left:10px}
 details.info{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px}
 details summary{cursor:pointer;font-weight:700}
@@ -685,6 +697,33 @@ const RAW = [
 ["kneeraise","Relevés de genoux suspendu","Poids du corps","m","i","abs","obl","10-15","hlr","Suspendu à la barre.|Monte les genoux vers la poitrine en enroulant le bassin.|Redescends sans balancer.","Version plus facile des relevés de jambes."],
 ["sidebend","Inclinaison latérale à l'haltère","Haltères","m","i","obl","","12-15 par côté","sidebend","Debout, un haltère dans une main.|Penche-toi du côté de l'haltère.|Remonte en contractant l'oblique opposé.","Le bassin reste immobile."],
 ["hollow","Hollow hold","Poids du corps","m","i","abs","","20-40 s","legraise","Couché sur le dos, bras au-dessus de la tête.|Décolle épaules et jambes du sol, bas du dos plaqué.|Tiens la position.","Plie les genoux pour la version plus facile."],
+["widepull","Tractions prise large","Poids du corps","m","c","lat","bic,delt","5-10","pullup","Suspendu, mains bien plus larges que les épaules.|Tire les coudes vers le bas et l'arrière jusqu'à la barre.|Redescends contrôlé.","Cible davantage la largeur du dos."],
+["kbrow","Rowing au kettlebell","Kettlebell","m","c","lat","bic,delt","8-12","bentrow","Une main et un genou sur le banc, kettlebell dans l'autre main.|Tire le kettlebell vers la hanche.|Redescends jusqu'à l'étirement.","Le kettlebell reste près du corps."],
+["smithshrug","Haussements d'épaules à la Smith","Machine","m","i","trap","fa","10-15","shrug","Barre guidée devant les cuisses.|Monte les épaules à la verticale.|Tiens une seconde, puis redescends.","La barre guidée permet de charger lourd sans perdre l'équilibre."],
+["kbdeadlift","Soulevé de terre au kettlebell","Kettlebell","m","c","glu,ham","lowb,quad","8-12","deadlift","Kettlebell entre les pieds.|Recule les hanches et saisis la poignée, dos neutre.|Pousse dans le sol pour te relever.","Bonne façon d'apprendre le soulevé de terre."],
+["smithrdl","Soulevé de terre roumain à la Smith","Machine","m","c","ham,glu","lowb","8-12","hinge","Barre guidée devant les cuisses.|Recule les hanches en glissant la barre le long des jambes.|Remonte en serrant les fessiers.","La trajectoire fixe aide à sentir les ischios."],
+["dbfsquat","Squat aux haltères","Haltères","m","c","quad,glu","ham","8-12","frontsquat","Haltères tenus aux épaules ou le long du corps.|Descends en gardant le buste droit.|Remonte en poussant dans le sol.","Pratique quand le support à squat est occupé."],
+["bblunge","Fentes marchées à la barre","Barre","m","c","quad,glu","ham,add","8-12","lunge","Barre sur le haut du dos.|Fais un grand pas en avant et descends le genou arrière.|Enchaîne avec l'autre jambe.","Garde le buste droit."],
+["smithlunge","Fente à la Smith","Machine","m","c","quad,glu","ham","8-12","lunge","Barre guidée sur le haut du dos, un pied devant.|Descends le genou arrière vers le sol.|Remonte en poussant dans le pied avant.","Plus stable que la fente libre."],
+["sllegpress","Presse à cuisses à une jambe","Machine","m","c","quad,glu","ham","10-12","legpress","Un pied au centre de la plateforme.|Descends en contrôlant le genou.|Pousse sans verrouiller.","Corrige les différences entre les deux jambes."],
+["kbpress","Développé au kettlebell","Kettlebell","m","c","delt","tri,abs","8-10","ohp","Kettlebell à l'épaule, coude sous la poignée.|Pousse au-dessus de la tête.|Redescends contrôlé à l'épaule.","Un bras à la fois : le tronc travaille pour rester droit."],
+["cablefront","Élévation frontale à la poulie","Poulie","m","i","delt","pec","12-15","frontraise","Dos à la poulie basse, poignée entre les jambes.|Monte le bras devant toi jusqu'aux yeux.|Redescends lentement.","Tension constante sur l'avant de l'épaule."],
+["bandlat","Élévation latérale à l'élastique","Élastique","m","i","delt","trap","15-20","latraise","Pied sur l'élastique, poignée en main.|Monte le bras sur le côté jusqu'à l'épaule.|Redescends lentement.","Pratique à la maison ou en voyage."],
+["dbpreacher","Curl pupitre aux haltères","Haltères","m","i","bic","","10-12","preacher","Arrière du bras sur le pupitre, un haltère.|Monte l'haltère vers l'épaule.|Redescends jusqu'au bras presque tendu.","Un bras à la fois pour bien contrôler."],
+["hammerpreacher","Curl marteau au pupitre","Haltères","m","i","bic,fa","","10-12","preacher","Bras sur le pupitre, prise neutre.|Monte l'haltère en gardant la prise neutre.|Redescends lentement.","Cible le brachial."],
+["bandcurl","Curl à l'élastique","Élastique","m","i","bic","fa","12-20","curl","Pieds sur l'élastique, poignées en main.|Monte les mains vers les épaules.|Redescends lentement.","La tension augmente en haut du mouvement."],
+["dbcgpress","Développé serré aux haltères","Haltères","m","c","tri,pec","delt","8-12","bench","Couché, haltères collés l'un contre l'autre, paumes face à face.|Descends sur la poitrine, coudes près du corps.|Pousse jusqu'aux bras tendus.","Cible les triceps et le haut des pectoraux."],
+["cablekick","Kickback triceps à la poulie","Poulie","m","i","tri","","12-15","kickback","Buste penché, poignée de la poulie basse en main.|Tends le bras vers l'arrière, coude fixe.|Reviens lentement.","Tension constante, même bras tendu."],
+["bandpushdown","Extension triceps à l'élastique","Élastique","m","i","tri","","15-20","pushdown","Élastique attaché en hauteur.|Pousse vers le bas jusqu'aux bras tendus, coudes collés.|Remonte lentement.","Bon échauffement des coudes."],
+["bandrow","Rowing à l'élastique","Élastique","m","c","lat","bic,trap","12-15","seatedrow","Assis, élastique autour des pieds.|Tire les mains vers le ventre en serrant les omoplates.|Reviens lentement.","Garde le dos droit."],
+["declcrunch","Crunch sur banc décliné","Poids du corps","m","i","abs","","10-15","crunch","Pieds bloqués sur le banc décliné.|Enroule le buste vers les genoux.|Redescends lentement.","Plus difficile que le crunch au sol."],
+["revcrunch","Crunch inversé","Poids du corps","m","i","abs","","10-15","legraise","Couché, genoux fléchis au-dessus des hanches.|Ramène les genoux vers la poitrine en décollant le bassin.|Redescends lentement.","Le mouvement vient du bassin, pas de l'élan."],
+["toesbar","Orteils à la barre","Poids du corps","m","i","abs","obl,lat","6-12","hlr","Suspendu à la barre, bras tendus.|Monte les pieds jusqu'à toucher la barre.|Redescends sans balancer.","Version avancée des relevés de jambes."],
+["weightplank","Planche lestée","Poids du corps","m","i","abs","obl","20-45 s","plank","Position de planche, disque posé sur le haut du dos.|Garde le corps aligné.|Tiens en respirant.","Demande à quelqu'un de placer le disque."],
+["cablepull","Tirage vertical à la corde","Poulie","m","i","lat","tri","12-15","straightarm","Corde à la poulie haute, buste penché.|Bras presque tendus, ramène la corde vers les cuisses.|Remonte lentement.","Écarte la corde en bas."],
+["legcurl1","Flexion des jambes couché à une jambe","Machine","m","i","ham","","10-12","legcurl","Couché sur le ventre, rouleau au-dessus d'un talon.|Ramène le talon vers la fesse.|Redescends lentement.","Corrige les différences entre les deux jambes."],
+["decfly","Écarté décliné aux haltères","Haltères","m","i","pec","delt","10-15","fly","Couché sur un banc décliné.|Ouvre les bras en arc jusqu'à l'étirement.|Referme en contractant la poitrine.","Cible le bas des pectoraux."],
+["incfly","Écarté incliné aux haltères","Haltères","m","i","pec","delt","10-15","fly","Couché sur un banc incliné à 30°.|Ouvre les bras en arc.|Referme au-dessus du haut de la poitrine.","Cible le haut des pectoraux."],
 ["extrot","Rotation externe à l'élastique","Élastique","stab","","rc","scap","2-3 × 12-15, tenir 1 s","extrot","Coude collé au corps à 90°, élastique tenu du côté opposé.|Tourne l'avant-bras vers l'extérieur.|Reviens lentement.","Une serviette roulée sous le coude aide à le garder en place."],
 ["extrotcable","Rotation externe à la poulie","Poulie","stab","","rc","scap","2-3 × 12-15, tenir 1 s","extrot","Poulie à la hauteur du coude, du côté opposé.|Tourne l'avant-bras vers l'extérieur, coude collé.|Reviens contrôlé.","Charge légère : ce sont de petits muscles."],
 ["introt","Rotation interne à l'élastique","Élastique","stab","","rc","pec","2-3 × 12-15","introt","Élastique attaché du côté du bras qui travaille.|Ramène l'avant-bras vers le ventre, coude collé.|Reviens lentement.","Complète la rotation externe."],
@@ -989,17 +1028,19 @@ function figInner(famId, ex, u){
   return `<line class="fig-floor" x1="0" y1="184" x2="200" y2="184"/>` + propsSvg(fam.props, pts) + bodySvg(fam, ex, pts, false) + equipSvg(fam, ex, pts);
 }
 /* flèche de mouvement : suit le point qui se déplace le plus entre le départ et l'arrivée */
-function arrowSvg(fam, a, b){
+function arrowSvg(fam, a, b, ex){
   const keys = fam.impl === "P" ? ["P"] : ["W1","A1","N","P","K1"];
   let best = null, dmax = 0;
   for (const k of keys){ const d = Math.hypot(b[k][0]-a[k][0], b[k][1]-a[k][1]); if (d > dmax + 4){ dmax = d; best = k; } }
   if (!best || dmax < 14) return "";
   const p = a[best], q = b[best], dx = q[0]-p[0], dy = q[1]-p[1], L = Math.hypot(dx,dy);
   const s0 = [p[0]+dx*.22, p[1]+dy*.22], s1 = [p[0]+dx*.78, p[1]+dy*.78];
-  const nx = -dy/L, ny = dx/L, side = (nx*(100-p[0]) + ny*(90-p[1])) > 0 ? -1 : 1, bend = Math.min(18, L*.22)*side;
+  const nx = -dy/L, ny = dx/L, side = (nx*(100-p[0]) + ny*(90-p[1])) > 0 ? -1 : 1, bend = Math.min(22, L*.28)*side;
+  const off = ex && /^Barre/.test(ex.eq || "") ? 22*side : 0;
+  s0[0] += nx*off; s0[1] += ny*off; s1[0] += nx*off; s1[1] += ny*off;
   const cpt = [(s0[0]+s1[0])/2 + nx*bend, (s0[1]+s1[1])/2 + ny*bend];
   const tx = s1[0]-cpt[0], ty = s1[1]-cpt[1], tl = Math.hypot(tx,ty) || 1, ux = tx/tl, uy = ty/tl;
-  const h1 = [s1[0]-ux*8-uy*5, s1[1]-uy*8+ux*5], h2 = [s1[0]-ux*8+uy*5, s1[1]-uy*8-ux*5];
+  const h1 = [s1[0]-ux*11-uy*7, s1[1]-uy*11+ux*7], h2 = [s1[0]-ux*11+uy*7, s1[1]-uy*11-ux*7];
   return `<path class="arw" d="M${f1(s0[0])},${f1(s0[1])} Q${f1(cpt[0])},${f1(cpt[1])} ${f1(s1[0]-ux*3)},${f1(s1[1]-uy*3)}"/><path class="arwh" d="M${f1(s1[0]+ux*2)},${f1(s1[1]+uy*2)} L${f1(h1[0])},${f1(h1[1])} L${f1(h2[0])},${f1(h2[1])} Z"/>`;
 }
 /* ================= athlète illustré (style planche anatomique) ================= */
@@ -1055,10 +1096,21 @@ function bodyIl(fam, ex, pts){
     s += lens(P, N, .42, .9, -5.2, 12, mc("lat"), nt) + lens(P, N, .03, .42, -6.8, 7, mc("lowb"), nt) + lens(P, N, .84, 1.1, -6.2, 7, mc("trap"), nt);
     s += lens(P, N, .1, .56, .6, 8, mc("obl"), nt) + lens(P, N, .06, .58, 7, 10, mc("abs"), nt) + lens(P, N, .6, .97, 7, 12.5, mc("pec"), nt);
     for (const t of [.2,.33,.46]){ const c0 = mix(P, N, t); s += seg([c0[0]+nt[0]*3, c0[1]+nt[1]*3], [c0[0]+nt[0]*11, c0[1]+nt[1]*11]); }
-    s += lens(mix(P, N, .2), mix(P, pts.K1, .42), 0, 1, -6.5, 13.5, mc("glu"));
   }
-  s += `<circle class="hd" cx="${f1(pts.H[0])}" cy="${f1(pts.H[1])}" r="10.2"/>`;
-  s += legSide(1, false) + armSide(1, false) + (front ? armSide(2, false) : "");
+  { const H = pts.H, dx = H[0]-N[0], dy = H[1]-N[1], l = Math.hypot(dx,dy) || 1, ux = dx/l, uy = dy/l;
+    s += `<circle class="hair" cx="${f1(H[0]+ux*2.6)}" cy="${f1(H[1]+uy*2.6)}" r="10"/>`;
+    s += `<circle class="hd" cx="${f1(H[0]-ux*.9)}" cy="${f1(H[1]-uy*.9)}" r="9.6"/>`; }
+  s += legSide(1, false);
+  // short
+  if (front){
+    const P1 = pts.P1, P2 = pts.P2, K1 = pts.K1, K2 = pts.K2, q = (p, d) => f1(p[0]+d[0]) + "," + f1(p[1]+d[1]);
+    const m1 = mix(P1, K1, .42), m2 = mix(P2, K2, .42);
+    s += `<path class="shorts" d="M${q(P1,[-11,-6])} L${q(P2,[11,-6])} L${q(m2,[10,0])} L${q(m2,[-6,0])} L${q(P,[0,6])} L${q(m1,[6,0])} L${q(m1,[-10,0])} Z"/>`;
+  } else {
+    s += limb(mix(P, N, .06), mix(pts.P1, pts.K1, .4), 20, 21, 18, .45, "shorts");
+    if (hitF("glu", PR) || hitF("glu", SE)) s += lens(mix(P, N, .14), mix(P, pts.K1, .38), 0, 1, -6, 12, mc("glu"));
+  }
+  s += armSide(1, false) + (front ? armSide(2, false) : "");
   return s;
 }
 
@@ -1069,7 +1121,7 @@ function sceneInner(famId, ex, u){
   let s = `<line class="fig-floor" x1="0" y1="184" x2="200" y2="184"/>` + propsSvg(fam.props, cur);
   if (fam.k.length > 1){
     const a = famPts(fam, 0), b = famPts(fam, 1);
-    s += `<g class="ghost">${bodyIl(fam, ex, b)}${equipSvg(fam, ex, b)}</g>` + arrowSvg(fam, a, b);
+    return s + bodyIl(fam, ex, cur) + equipSvg(fam, ex, cur) + arrowSvg(fam, a, b, ex);
   }
   return s + bodyIl(fam, ex, cur) + equipSvg(fam, ex, cur);
 }
@@ -1150,6 +1202,34 @@ function readImage(file, maxSide){
   });
 }
 const photoOf = id => (S.imgs && S.imgs[id]) || (EX[id] && EX[id].img) || null;
+/* vignette cadrée sur l'athlète (et son équipement) pour remplir la carte */
+const FIT = {};
+function fitSvg(famId, ex, u){
+  const fam = FAM[famId];
+  if (!FIT[famId]){
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    const add = (x, y, r) => { x0 = Math.min(x0, x - r); y0 = Math.min(y0, y - r); x1 = Math.max(x1, x + r); y1 = Math.max(y1, y + r); };
+    for (const t of [0, .5, 1]){ const p = famPts(fam, t); for (const k in p) add(p[k][0], p[k][1], k === "H" ? 13 : 10); }
+    for (const pr of fam.props || []){ if (pr[0] === "r"){ add(pr[1], pr[2], 0); add(pr[1] + pr[3], pr[2] + pr[4], 0); } if (pr[0] === "l"){ add(pr[1], Math.min(pr[2], 184), 0); add(pr[3], Math.min(pr[4], 184), 0); } }
+    y1 = Math.max(y1, 186);
+    let w = x1 - x0, h = y1 - y0, side = Math.max(w, h) + 24;
+    const cx = (x0 + x1)/2, cy = (y0 + y1)/2;
+    FIT[famId] = [cx - side/2, Math.min(cy - side/2, 190 - side), side];
+  }
+  const [vx, vy, vs] = FIT[famId];
+  return `<svg class="il" viewBox="${f1(vx)} ${f1(vy)} ${f1(vs)} ${f1(vs)}" role="img" aria-label="Illustration du mouvement">${sceneInner(famId, ex, u)}</svg>`;
+}
+function doseTxt(e){
+  if (e.cat !== "m") return e.r;
+  const sets = e.kind === "c" ? 4 : 3;
+  return /s\b|par côté/.test(e.r) ? `Séries : 3 · ${e.r}` : `Séries : ${sets} · Reps : ${e.r}`;
+}
+function cardArt(e){
+  const ph = photoOf(e.id);
+  if (ph) return `<span class="exart"><img src="${ph}" alt=""></span>`;
+  if (e.fam && FAM[e.fam]) return `<span class="exart">${fitSvg(e.fam, e, .55)}</span>`;
+  return `<span class="exart">${mapSvg(FRONT, e.p, e.s)}</span>`;
+}
 function thumbHtml(e){
   const ph = photoOf(e.id);
   if (ph) return `<span class="thumb"><img src="${ph}" alt=""></span>`;
@@ -1501,12 +1581,14 @@ function libList(){
   const L = filtered();
   if (S.ui.cat === "mine" && !EX_LIST.some(e => e.custom)) return `<div class="empty">Tu n'as pas encore créé d'exercice. Touche « Créer un exercice » pour ajouter le tien, avec ta propre photo.</div>`;
   return `<p class="small muted" style="margin-bottom:10px">${L.length} exercice${L.length>1?"s":""}</p>
-  <div class="stack">${L.length ? L.map(e => `
-    <button class="exitem" data-act="exDetail" data-ex="${e.id}">
-      ${thumbHtml(e)}
-      <span class="grow"><span class="t">${esc(e.n)}</span><span class="s">${e.p.map(m => REGION_NAME[m]).join(", ")}</span><span class="row" style="gap:6px"><span class="tag">${esc(e.eq)}</span>${e.cat !== "m" ? `<span class="tag">${esc(e.r)}</span>` : ""}</span></span>
-      ${S.pick ? `<span class="btn sm primary" data-act="addPicked" data-ex="${e.id}">Ajouter</span>` : ""}
-    </button>`).join("") : `<div class="empty">Aucun exercice ne correspond à ces filtres.</div>`}</div>`;
+  ${L.length ? `<div class="exgrid">${L.map(e => `
+    <button class="excard" data-act="exDetail" data-ex="${e.id}">
+      ${cardArt(e)}
+      <span class="exname">${esc(e.n)}</span>
+      <span class="exdose">${esc(doseTxt(e))}</span>
+      <span class="exmus">${e.p.map(m => REGION_NAME[m]).join(" · ")} · ${esc(e.eq)}</span>
+      ${S.pick ? `<span class="btn sm primary exadd" data-act="addPicked" data-ex="${e.id}">+ Ajouter</span>` : ""}
+    </button>`).join("")}</div>` : `<div class="empty">Aucun exercice ne correspond à ces filtres.</div>`}`;
 }
 function exDetail(id){
   const e = EX[id]; if (!e) return;
@@ -1516,7 +1598,7 @@ function exDetail(id){
     <div><span class="eyebrow">${esc(e.custom ? "Mon exercice" : CAT_LABEL[e.cat])}</span><h2>${esc(e.n)}</h2></div>
     <div class="row" style="gap:6px"><span class="tag">${esc(e.eq)}</span>${hasFig ? `<span class="tag">${esc(FAM[e.fam].lab)}</span>` : ""}</div>
     ${ph ? `<div class="photo"><img src="${ph}" alt="Photo de l'exercice"></div>` : ""}
-    ${hasFig ? `<div class="figbox" id="figbox">${figSvg(e.fam, e, 0)}</div><div class="legend"><span><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" rx="3" fill="#1F86EE"/></svg>Muscles principaux</span><span><svg viewBox="0 0 16 16"><rect class="lg2" x="1" y="1" width="14" height="14" rx="3"/></svg>Secondaires</span><span><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" rx="3" fill="#E2E5EA" opacity=".45"/></svg>Position d'arrivée</span></div>` : ""}
+    ${hasFig ? `<div class="figbox" id="figbox">${figSvg(e.fam, e, 0)}</div><div class="legend"><span><svg viewBox="0 0 16 16"><rect x="1" y="1" width="14" height="14" rx="3" fill="#1E88FF"/></svg>Muscles principaux</span><span><svg viewBox="0 0 16 16"><rect class="lg2" x="1" y="1" width="14" height="14" rx="3"/></svg>Secondaires</span></div>` : ""}
     ${e.custom ? "" : `<div class="row">
       <label class="btn sm file">${ph ? "Changer la photo" : "Ajouter ma photo"}<input type="file" accept="image/*" id="ex-img"></label>
       ${ph ? `<button class="btn sm danger" data-act="rmPhoto" data-ex="${id}">Retirer la photo</button>` : ""}

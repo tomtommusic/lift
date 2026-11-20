@@ -1,0 +1,76 @@
+name: TestFlight
+# Lancement manuel : onglet Actions > TestFlight > Run workflow.
+# Secrets requis (Settings > Secrets and variables > Actions) :
+#   APPLE_TEAM_ID  : identifiant d'équipe (10 caractères)
+#   ASC_KEY_ID     : identifiant de la clé API App Store Connect
+#   ASC_ISSUER_ID  : identifiant de l'émetteur (Issuer ID)
+#   ASC_KEY_P8     : contenu complet du fichier AuthKey_XXXX.p8
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Numéro de version affiché (vide = celui du projet)"
+        required: false
+        default: ""
+      runner:
+        description: "Mac de GitHub (changer si l'envoi reste en file d'attente)"
+        required: false
+        default: macos-15-intel
+        type: choice
+        options: [macos-15-intel, macos-15, macos-26]
+jobs:
+  upload:
+    runs-on: ${{ github.event.inputs.runner || 'macos-15-intel' }}
+    timeout-minutes: 60
+    env:
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Choisir Xcode 26 (exigé par Apple)
+        run: |
+          X=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | grep -v -i beta | sort -V | tail -1); [ -n "$X" ] || X=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)
+          [ -n "$X" ] || { echo "::error::Xcode 26 absent de ce Mac ; choisir macos-26"; ls /Applications | grep Xcode; exit 1; }
+          sudo xcode-select -s "$X"; xcodebuild -version
+      - name: Vérifier les secrets
+        run: |
+          ok=1; for v in APPLE_TEAM_ID ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_P8; do [ -n "${!v}" ] || { echo "::error::Secret manquant : $v"; ok=0; }; done; [ $ok = 1 ]
+      - name: Installer la clé API (temporaire)
+        run: |
+          mkdir -p "$RUNNER_TEMP/keys"; KEY="$RUNNER_TEMP/keys/AuthKey_$ASC_KEY_ID.p8"
+          printf '%s\n' "$ASC_KEY_P8" > "$KEY"; chmod 600 "$KEY"; echo "KEY=$KEY" >> "$GITHUB_ENV"
+      - name: Archiver (sans signature ; la signature se fait à l'envoi, avec un certificat géré par Apple)
+        run: |
+          set -o pipefail
+          SIGN='CODE_SIGN_STYLE=Automatic CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY='
+          V="${{ github.event.inputs.version }}"; EXTRA=""; [ -n "$V" ] && EXTRA="MARKETING_VERSION=$V"
+          xcodebuild -project ios/Lift.xcodeproj -scheme Lift -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath "$RUNNER_TEMP/Lift.xcarchive" \
+            -allowProvisioningUpdates -authenticationKeyPath "$KEY" -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" $SIGN CURRENT_PROJECT_VERSION="${{ github.run_number }}" $EXTRA \
+            archive > "$RUNNER_TEMP/archive.log" 2>&1 || { grep -E "error:|error -|Error|No Account|No profiles|Provisioning|requires a provisioning|Signing" "$RUNNER_TEMP/archive.log" | sort -u | head -15 | while IFS= read -r l; do echo "::error::$l"; done; tail -60 "$RUNNER_TEMP/archive.log"; exit 1; }
+          tail -15 "$RUNNER_TEMP/archive.log"
+      - name: Envoyer à App Store Connect (TestFlight)
+        run: |
+          set -o pipefail
+          cat > "$RUNNER_TEMP/export.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>teamID</key><string>$APPLE_TEAM_ID</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+          </dict></plist>
+          PLIST
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/Lift.xcarchive" -exportOptionsPlist "$RUNNER_TEMP/export.plist" \
+            -exportPath "$RUNNER_TEMP/out" -allowProvisioningUpdates \
+            -authenticationKeyPath "$KEY" -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID" > "$RUNNER_TEMP/export.log" 2>&1 || { grep -E "error|Error|ERROR" "$RUNNER_TEMP/export.log" | sort -u | head -15 | while IFS= read -r l; do echo "::error::$l"; done; tail -60 "$RUNNER_TEMP/export.log"; exit 1; }
+          tail -15 "$RUNNER_TEMP/export.log"
+          echo "Version envoyée : build ${{ github.run_number }}. Elle apparaîtra dans TestFlight après le traitement par Apple (10 à 30 min)."
+      - name: Effacer la clé
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/keys"
